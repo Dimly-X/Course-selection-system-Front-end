@@ -24,97 +24,35 @@
                 :inline="true"
                 ref="form"
             >
-                <el-button type="primary" @click="getList">搜索</el-button>
+                <el-button type="primary" @click="getList(searchForm.keyword)">搜索</el-button>
             </common-form>
         </div>
-        <div class="application-table" >
-            <el-table
-
-                :data="tableData"
-                height="height:100%"
-                style="width: 100%"
-                border>
-                <el-table-column
-                    label="申请时间"
-                    sortable
-                    align="center"
-                    header-align="center"
-                    prop="date">
-                </el-table-column>
-                <el-table-column
-                    label="课程名称"
-                    align="center"
-                    header-align="center"
-                    prop="name">
-                </el-table-column>
-                <el-table-column
-                    label="开设院系"
-                    align="center"
-                    header-align="center"
-                    prop="department">
-                </el-table-column>
-                <el-table-column
-                    label="课程类别"
-                    align="center"
-                    header-align="center"
-                    prop="category">
-                </el-table-column>
-                <el-table-column
-                    label="学分"
-                    align="center"
-                    header-align="center"
-                    prop="credit">
-                </el-table-column>
-                <el-table-column
-                    label="教师"
-                    align="center"
-                    header-align="center"
-                    prop="teacher">
-                </el-table-column>
-                <el-table-column
-                    label="详情"
-                    align="center"
-                    header-align="center"
-                >
-                <template>
-                    <el-link type="primary">查看</el-link>
-                </template>
-                </el-table-column>
-                <el-table-column
-                label="操作"
-                align="center"
-                header-align="center">
-                <template>
-                    <el-button
-                        size="mini"
-                        @click="handleEdit">编辑</el-button>
-                    <el-button
-                        size="mini"
-                        type="danger"
-                        @click="handleDelete">删除</el-button>
-                </template>
-                </el-table-column>
-            </el-table>
-            <!-- @current-change是改变页数的时候的回调函数 -->
-            <el-pagination
-                class="pager"
-                layout="prev, pager, next"
-                :total="config.total"
-                :current-page.sync="config.page"
-                @current-change="changePage"
-                page-size="20"
-                >
-            </el-pagination>
+        <div>
+            <common-table
+                :tableData="tableData"
+                :tableLabel="tableLabel"
+                :config="config"
+                @changePage="getList()"
+                @look="lookApplication"
+                @edit="editApplication"
+                @del="delApplication"
+            >
+            </common-table>
         </div>
     </div>
 </template>
+
 <script>
 
 import CommonForm from '@/components/CommonForm'
+import CommonTable from '@/components/CommonTable.vue'
+import { getApplication } from '../../api/data'
+
 export default{
     name:'Application',
     components:{
-        CommonForm
+        CommonForm,
+        CommonTable
     },
     data(){
         return{
@@ -122,7 +60,7 @@ export default{
             isShow: false,
             operateFormLabel: [
                     {
-                        model: 'name',
+                        model: 'curriculum_name',
                         label: '课程名称',
                         type: 'input'
                     },
@@ -228,14 +166,15 @@ export default{
                 ],
             //双向绑定↓
             operateForm: {
-                name: '',
+                curriculum_name: '',
                 department: '',
                 category: '',
                 credit: '',
                 teacher: '',
                 requirement: '',
                 introduction: '',
-                remark: ''
+                remark: '',
+                apply_state: '',
             },
             searchFormLabel: [
                 {
@@ -247,19 +186,40 @@ export default{
             searchForm: {
                 keyword: ''
             },
-            tableData:[{
-                date: '2016-05-02',
-                name: '高级编程',
-                department: '软件工程学院',
-                category: '专业任意选修',
-                credit: '2',
-                teacher: '陈老师',
-                requirement: '无',
-                introduction: '无',
-                remark: '无'
-            }],
+            tableData:[],
+            tableLabel:[
+                {
+                    prop:"apply_time",
+                    label:"申请时间",
+                },
+                {
+                    prop:"curriculum_name",
+                    label:"课程名称",
+                    width: 200
+                },
+                // {
+                //     prop:"department",
+                //     label:"开设院系"
+                // },
+                {
+                    prop:"category_label",
+                    label:"课程类型"
+                },
+                // {
+                //     prop:"credit",
+                //     label:"学分"
+                // },
+                {
+                    prop:"teacher",
+                    label:"主讲教师"
+                },
+                {
+                    prop:"apply_state_label",
+                    label:"申请状态"
+                }
+               ],
             config: {
-                total: 1,
+                total: 30,
                 page: 1
             }
         }
@@ -267,16 +227,20 @@ export default{
     methods:{
         confirm(){
             // 要说明的是，这里不是调用了接口吗，真正的接口定义应该是在/api/data.js里
-            // 但是因为我们是用mock模拟的接口，所以这里暂时是在mock.js里面把接口拦住了（之前课程管理页也是用的这个方法）
+            // 但是因为我是用mock模拟的接口，所以这里暂时是在mock.js里面把接口拦住了（之前课程管理页也是用的这个方法）
             if (this.operateType === 'edit'){
                 this.$http.post('/application/edit', this.operateForm).then(res => {
+                    console.log(this.operateForm)
                     console.log(res)
                     this.isShow= false
+                    this.getList()
                 })
             } else {
                 this.$http.post('/application/add', this.operateForm).then(res => {
+                    console.log(this.operateForm)
                     console.log(res)
                     this.isShow= false
+                    this.getList()
                 })
             }
         },
@@ -284,28 +248,74 @@ export default{
             this.isShow = true
             this.operateType = 'add'
             this.operateForm = {
-                name: '',
+                curriculum_name: '',
                 department: '',
                 category: '',
                 credit: '',
                 teacher: '',
+                semester:'',
+                upper_limit:'',
                 requirement: '',
                 introduction: '',
                 remark: ''
             }
         },
-        getList(){
 
+        getList(curriculum_name = ''){
+            console.log("aaa","aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            this.config.loading =true
+            curriculum_name ? (this.config.page = 1) : '' //搜索
+            getApplication({
+                page: this.config.page,
+                curriculum_name
+            }).then(({ data:res }) => {
+                console.log(res,'res')
+                //回调函数，res是接口的响应值
+                this.tableData = res.list.map(item => {
+                  //  item.sexLabel = item.sex === 0 ? "女" : "男"
+                    let departmentList = ['软件工程学院','法学院','马克思主义学院','经济学院','社会发展学院','外语学院','国际汉语文化学院','心理与认知科学学院'];
+                    let categoryList = ['专业必修','专业任意选修','学科基础课','分布式课程','体育类','思政类','英语类'];
+                    let statusList = ['待处理','通过','拒绝'];
+                   // item.department = departmentList[item.department];
+                    item.category_label = categoryList[item.category];
+                    item.apply_state_label = statusList[item.apply_state];
+                    return item
+                })
+                this.config.total = res.count
+                this.config.loading = false
+
+            })
         },
-        changePage(){
+        lookApplication(row){
             
         },
-        handleEdit(){
-
+        editApplication(row){
+            this.isShow = true
+            this.operateType = 'edit'
+            this.operateForm = JSON.parse(JSON.stringify(row));//不能直接=row，因为这是vue 的双向数据绑定的弊端，实时更新数据，因为是一个数据源，因为在修改对象的时候，对象的指针直接指向页面数据了
         },
-        handleDelete(){
-
-        }
+        delApplication(row){
+            this.$confirm("此操作将永久删除该申请，是否继续？","提示",{
+                confirmButtonText:"确认",
+                cancelButtonText:"取消",
+                type:"warning"
+            }).then( () => {
+                const apply_id = row.apply_id
+                this.$http.post("/application/del",{
+                    params: { apply_id }
+                }).then(() =>{
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功'
+                    })
+                    this.getList()
+                })
+            })
+        },
+    },
+    //（生命周期）创造的时候就要调用
+    created() {
+        this.getList() 
     }
 }
 </script>
@@ -316,15 +326,5 @@ export default{
     justify-content: space-between;
     align-items: flex-start;//对齐
     margin-top: 20px;
-}
-.application-table{
-    height: calc(100% - 62px);
-    background-color: #fff;
-    position: relative;
-    .pager{
-        position: absolute;
-        bottom: 0;
-        right: 20px;
-    }
 }
 </style>

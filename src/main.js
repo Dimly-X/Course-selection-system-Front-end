@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { Button, Radio, Container, Main, Aside, Header, Menu, Submenu, MenuItem, MenuItemGroup, Icon, Dropdown, DropdownItem, DropdownMenu, Row, Col, Card, Table, TableColumn, Input, Link, Select, Option, Form, FormItem, Switch, DatePicker, Dialog, Pagination } from 'element-ui';
+import { Button, Radio, Container, Main, Aside, Header, Menu, Submenu, MenuItem, MenuItemGroup, Icon, Dropdown, DropdownItem, DropdownMenu, Row, Col, Card, Table, TableColumn, Input, Link, Select, Option, Form, FormItem, Switch, DatePicker, Dialog, Pagination, MessageBox, Message } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/less/index.less'
 
@@ -41,12 +41,31 @@ Vue.use(DatePicker)
 Vue.use(Dialog)
 Vue.use(Pagination)
 
+
 //因为axios不是插件，所以想使用的话需要把它绑定在vue的prototype这个属性上
 Vue.prototype.$http = http
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$message = Message
+
+router.beforeEach((to, from, next) => {
+    store.commit('getToken')
+    const token = store.state.user.token
+    if (!token && to.name != 'login') {
+        next({ name: 'login' })
+    } else if (token && to.name === 'login') {
+        next({ name: 'home' })
+    } else {
+        next()
+    }
+})
 
 
 new Vue({
     router,
     store,
     render: h => h(App),
+    created() {
+        //动态路由设置，这样每次刷新都会去调用
+        this.$store.commit('addMenu', router)
+    }
 }).$mount('#app')

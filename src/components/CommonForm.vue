@@ -46,7 +46,7 @@
     </el-form>
   </template>
 
-<!-- // formLabel 是标签数据 -->
+<!-- formLabel 是标签数据 -->
   <script>
   export default {
     name: 'CommonForm',
@@ -56,7 +56,7 @@
       inline:Boolean
     },
     data(){
-
+      return{}
     }
   };
   </script>

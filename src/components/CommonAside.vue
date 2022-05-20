@@ -28,57 +28,57 @@
   export default {
     data() {
       return {
-        menu: [
-            {
-                path:'/home',
-                name:'home',
-                label:'首页',
-                icon:'s-home',
-                url:'Home/Home'
-            },
-            {
-                path:'/appliaction',
-                name:'application',
-                label:'开课申请',
-                icon:'notebook-1',
-                url:'Application/Application'
-            },
-            {
-                path:'/release',
-                name:'release',
-                label:'成绩发布',
-                icon:'document-checked',
-                url:'Release/Release'
-            },
-            {
-                path:'/manage',
-                name:'manage',
-                label:'课程管理',
-                icon:'notebook-2',
-                url:'Manage/Manage'
-            },
-            {
-                path:'/examine',
-                name:'examine',
-                label:'新课程审核',
-                icon:'edit',
-                url:'Examine/Examine'
-            },
-            {
-                path:'/score',
-                name:'score',
-                label:'成绩',
-                icon:'document-checked',
-                url:'Score/Score'
-            },
-            {
-                path:'/select',
-                name:'select',
-                label:'选课',
-                icon:'reading',
-                url:'Select/Select'
-            }
-        ]
+        menu: []
+        //     {
+        //         path:'/home',
+        //         name:'home',
+        //         label:'首页',
+        //         icon:'s-home',
+        //         url:'Home/Home'
+        //     },
+        //     {
+        //         path:'/appliaction',
+        //         name:'application',
+        //         label:'开课申请',
+        //         icon:'notebook-1',
+        //         url:'Application/Application'
+        //     },
+        //     {
+        //         path:'/release',
+        //         name:'release',
+        //         label:'成绩发布',
+        //         icon:'document-checked',
+        //         url:'Release/Release'
+        //     },
+        //     {
+        //         path:'/manage',
+        //         name:'manage',
+        //         label:'课程管理',
+        //         icon:'notebook-2',
+        //         url:'Manage/Manage'
+        //     },
+        //     {
+        //         path:'/examine',
+        //         name:'examine',
+        //         label:'新课程审核',
+        //         icon:'edit',
+        //         url:'Examine/Examine'
+        //     },
+        //     {
+        //         path:'/score',
+        //         name:'score',
+        //         label:'成绩',
+        //         icon:'document-checked',
+        //         url:'Score/Score'
+        //     },
+        //     {
+        //         path:'/select',
+        //         name:'select',
+        //         label:'选课',
+        //         icon:'reading',
+        //         url:'Select/Select'
+        //     }
+        // ]
       };
     },
     methods: {
@@ -98,13 +98,18 @@
     //计算属性
     computed:{
         noChildren(){
-            return this.menu.filter(item => !item.children)
+            //return this.menu.filter(item => !item.children)
+            return this.asyncMenu.filter(item => !item.children)
         },
         hasChildren(){
-            return this.menu.filter(item => item.children)
+            //return this.menu.filter(item => item.children)
+            return this.asyncMenu.filter(item => item.children)
         },
         isCollapse(){
           return this.$store.state.tab.isCollapse
+        },
+        asyncMenu(){
+          return this.$store.state.tab.menu
         }
     }
   }

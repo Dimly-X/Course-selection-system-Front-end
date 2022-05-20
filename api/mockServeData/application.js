@@ -16,22 +16,28 @@ function param2Obj(url) {
     )
 }
 
+let departmentList = ['软件工程学院', '法学院', '马克思主义学院', '经济学院', '社会发展学院', '外语学院', '国际汉语文化学院', '心理与认知科学学院'];
+let categoryList = ['专业必修', '专业任意选修', '学科基础课', '分布式课程', '体育类', '思政类', '英语类'];
+let statusList = ['待处理', '通过', '拒绝'];
 let List = []
 const count = 200
 
 for (let i = 0; i < count; i++) {
     List.push(
         Mock.mock({
-            id: Mock.Random.guid(),
-            name: Mock.Random.cname(),
-            date: Mock.Random.date(),
-            department: Mock.Random.integer(0, 7),
+            apply_id: Mock.Random.guid(),
+            curriculum_name: Mock.Random.cword(4, 8),
+            department: Mock.Random.range(0, 7, 2),
             category: Mock.Random.integer(0, 6),
             credit: Mock.Random.integer(1, 5),
             teacher: Mock.Random.cname(),
-            requirement: Mock.Random.cparagraph(30, 60),
-            introduction: Mock.Random.cparagraph(30, 60),
-            remark: Mock.Random.cparagraph(20, 80)
+            semester: "2021-2022 2",
+            upper_limit: Mock.Random.integer(30, 100),
+            apply_time: Mock.Random.date(),
+            requirement: Mock.Random.cparagraph(1, 3),
+            introduction: Mock.Random.cparagraph(1, 3),
+            remark: Mock.Random.cparagraph(1, 3),
+            apply_state: Mock.Random.integer(0, 2)
         })
     )
 }
@@ -44,10 +50,10 @@ export default {
      * @return {{code: number, count: number, data: *[]}}
      */
     getApplicationList: config => {
-        const { name, page = 1, limit = 20 } = param2Obj(config.url)
-        console.log('name:' + name, 'page:' + page, '分页大小limit:' + limit)
+        const { curriculum_name, page = 1, limit = 10 } = param2Obj(config.url)
+        console.log('name:' + curriculum_name, 'page:' + page, '分页大小limit:' + limit)
         const mockList = List.filter(application => {
-            if (name && application.name.indexOf(name) === -1 && application.addr.indexOf(name) === -1) return false
+            if (curriculum_name && application.curriculum_name.indexOf(curriculum_name) === -1 && application.teacher.indexOf(curriculum_name) === -1 && categoryList[application.category].indexOf(curriculum_name) === -1) return false
             return true
         })
         const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
@@ -63,19 +69,22 @@ export default {
      * @return {{code: number, data: {message: string}}}
      */
     createApplication: config => {
-        const { name, department, category, credit, teacher, requirement, introduction, remark } = JSON.parse(config.body)
+        const { curriculum_name, department, category, credit, teacher, semester, upper_limit, requirement, introduction, remark } = JSON.parse(config.body)
         console.log(JSON.parse(config.body))
         List.unshift({
-            id: Mock.Random.guid(),
-            date: Date(),
-            name: name,
+            apply_id: Mock.Random.guid(),
+            curriculum_name: curriculum_name,
             department: department,
             category: category,
             credit: credit,
             teacher: teacher,
+            semester: semester,
+            upper_limit: upper_limit,
+            apply_time: Date(),
             requirement: requirement,
             introduction: introduction,
-            remark: remark
+            remark: remark,
+            apply_state: 0,
         })
         return {
             code: 20000,
@@ -90,14 +99,16 @@ export default {
      * @return {*}
      */
     deleteApplication: config => {
-        const { id } = param2Obj(config.url)
-        if (!id) {
+        //const { apply_id } = param2Obj(config.url)
+        const body = JSON.parse(config.body)
+        const apply_id = body.params.apply_id;
+        if (!apply_id) {
             return {
                 code: -999,
                 message: '参数不正确'
             }
         } else {
-            List = List.filter(u => u.id !== id)
+            List = List.filter(u => u.apply_id !== apply_id)
             return {
                 code: 20000,
                 message: '删除成功'
@@ -112,7 +123,7 @@ export default {
     batchremove: config => {
         let { ids } = param2Obj(config.url)
         ids = ids.split(',')
-        List = List.filter(u => !ids.includes(u.id))
+        List = List.filter(u => !ids.includes(u.apply_id))
         return {
             code: 20000,
             data: {
@@ -126,19 +137,24 @@ export default {
      * @return {{code: number, data: {message: string}}}
      */
     updateApplication: config => {
-        const { name, department, category, credit, teacher, requirement, introduction, remark } = JSON.parse(config.body)
+        const { apply_id, curriculum_name, department, category, credit, teacher, semester, upper_limit, requirement, introduction, remark, apply_state } = JSON.parse(config.body)
         const category_num = parseInt(category)
         const credit_num = parseInt(credit)
+        const apply_state_num = parseInt(apply_state)
         List.some(u => {
-            if (u.id === id) {
-                u.name = name
+            if (u.apply_id === apply_id) {
+                u.curriculum_name = curriculum_name
                 u.department = department
                 u.category = category_num
                 u.credit = credit_num
                 u.teacher = teacher
+                u.semester = semester
+                u.upper_limit = upper_limit
                 u.requirement = requirement
                 u.introduction = introduction
                 u.remark = remark
+                u.apply_state = apply_state_num
+                console.log("编辑完成", u.apply_state)
                 return true
             }
         })

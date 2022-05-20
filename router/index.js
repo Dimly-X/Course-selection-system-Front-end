@@ -12,57 +12,57 @@ const routes = [{
         name: 'Main',
         component: () =>
             import ('../views/Main.vue'), //其他界面继承Main的侧边栏布局
-        children: [{
-                path: '/home',
-                name: 'home',
-                component: () =>
-                    import ('../views/Home')
-            },
-            {
-                path: '/application',
-                name: 'application',
-                component: () =>
-                    import ('../views/Application')
-            },
-            {
-                path: '/release',
-                name: 'release',
-                component: () =>
-                    import ('../views/Release')
-            },
-            {
-                path: '/manage',
-                name: 'manage',
-                component: () =>
-                    import ('../views/Manage')
-            },
-            {
-                path: '/examine',
-                name: 'examine',
-                component: () =>
-                    import ('../views/Examine')
-            },
-            {
-                path: '/score',
-                name: 'score',
-                component: () =>
-                    import ('../views/Score')
-            },
-            {
-                path: '/select',
-                name: 'select',
-                component: () =>
-                    import ('../views/Select')
-            },
+        children: [
+            // {
+            //     path: '/home',
+            //     name: 'home',
+            //     component: () =>
+            //         import ('../views/Home')
+            // },
+            // {
+            //     path: '/application',
+            //     name: 'application',
+            //     component: () =>
+            //         import ('../views/Application')
+            // },
+            // {
+            //     path: '/release',
+            //     name: 'release',
+            //     component: () =>
+            //         import ('../views/Release')
+            // },
+            // {
+            //     path: '/manage',
+            //     name: 'manage',
+            //     component: () =>
+            //         import ('../views/Manage')
+            // },
+            // {
+            //     path: '/examine',
+            //     name: 'examine',
+            //     component: () =>
+            //         import ('../views/Examine')
+            // },
+            // {
+            //     path: '/score',
+            //     name: 'score',
+            //     component: () =>
+            //         import ('../views/Score')
+            // },
+            // {
+            //     path: '/select',
+            //     name: 'select',
+            //     component: () =>
+            //         import ('../views/Select')
+            // }
         ]
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: () =>
+            import ('../views/Login/login.vue')
     }
-    // ,
-    // {
-    //     path: '/user',
-    //     name: 'User',
-    //     component: () =>
-    //         import ('../views/User.vue')
-    // }
 ]
 
 
