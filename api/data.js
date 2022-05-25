@@ -29,3 +29,11 @@ export const getRelease = () => {
         method: 'get',
     })
 }
+
+export const getStudentList = (params) => {
+    return axios.request({
+        url: 'http://localhost:8080/register/getStudentList',
+        method: 'get',
+        params
+    })
+}
