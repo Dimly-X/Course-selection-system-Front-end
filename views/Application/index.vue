@@ -149,6 +149,30 @@ export default{
                         type: 'input'
                     },
                     {
+                        model: 'semester',
+                        label: '开课学期',
+                        type: 'select',
+                        opts: [
+                            {
+                                label: '2021-2022 1',
+                                value: 0
+                            },
+                            {
+                                label: '2021-2022 2',
+                                value: 1
+                            },
+                            {
+                                label: '2021-2022 3',
+                                value: 2
+                            }
+                        ]
+                    },
+                    {
+                        model: 'upper_limit',
+                        label: '人数上限',
+                        type: 'input'
+                    },
+                    {
                         model: 'requirement',
                         label: '课程要求',
                         type: 'textInput'

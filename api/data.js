@@ -22,3 +22,10 @@ export const getApplication = (params) => {
         params
     })
 }
+
+export const getRelease = () => {
+    return axios.request({
+        url: 'http://localhost:8080/register/getRelease',
+        method: 'get',
+    })
+}
