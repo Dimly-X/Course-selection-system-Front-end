@@ -1,3 +1,4 @@
+//整个项目的入口文件
 import Vue from 'vue'
 import App from './App.vue'
 import { Button, Radio, Container, Main, Aside, Header, Menu, Submenu, MenuItem, MenuItemGroup, Icon, Dropdown, DropdownItem, DropdownMenu, Row, Col, Card, Table, TableColumn, Input, Link, Select, Option, Form, FormItem, Switch, DatePicker, Dialog, Pagination, MessageBox, Message } from 'element-ui';
