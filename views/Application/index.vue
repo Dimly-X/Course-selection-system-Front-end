@@ -32,6 +32,7 @@
                 :tableData="tableData"
                 :tableLabel="tableLabel"
                 :config="config"
+
                 @changePage="getList()"
                 @look="lookApplication"
                 @edit="editApplication"
@@ -191,11 +192,12 @@ export default{
                 {
                     prop:"apply_time",
                     label:"申请时间",
+                    width: 120
                 },
                 {
                     prop:"curriculum_name",
                     label:"课程名称",
-                    width: 200
+                    width: 250
                 },
                 // {
                 //     prop:"department",
@@ -203,7 +205,8 @@ export default{
                 // },
                 {
                     prop:"category_label",
-                    label:"课程类型"
+                    label:"课程类型",
+                    width: 200
                 },
                 // {
                 //     prop:"credit",
@@ -211,11 +214,13 @@ export default{
                 // },
                 {
                     prop:"teacher",
-                    label:"主讲教师"
+                    label:"主讲教师",
+                    width: 200
                 },
                 {
                     prop:"apply_state_label",
-                    label:"申请状态"
+                    label:"申请状态",
+                    width: 80
                 }
                ],
             config: {

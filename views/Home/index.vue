@@ -1,7 +1,7 @@
 <template>
     <el-row class="home" :gutter="20">
         <el-col :span="8" style="margin-top: 20px">
-            <el-card shadow="hover">
+            <el-card class="user_card" >
                 <div class="user">
                     <img :src="userImg" />
                     <div class="userinfo">
@@ -41,3 +41,9 @@ export default{
 }
 </script>
 
+<style>
+.user_card{
+  shadow: hover;
+  width: fit-content;
+}
+</style>

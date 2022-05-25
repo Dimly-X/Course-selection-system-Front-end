@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="common-table">
-        <el-table :data="tableData" height=580px stripe border>
+        <el-table :data="tableData" height=680px stripe border>
             <el-table-column
                 show-overflow-tooltip
                 align="center"
@@ -9,7 +9,7 @@
                 v-for="item in tableLabel"
                 :key="item.prop"
                 :label="item.label"
-                :width="item.width ? item.width : 125"
+                :width="item.width"
             >
             <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ scope.row[item.prop] }}</span>
