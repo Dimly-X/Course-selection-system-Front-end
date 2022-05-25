@@ -1,23 +1,26 @@
 <template>
   <el-table
     :data="tableData"
-    style="width: 100%"
+    class="table"
+    stripe
     border>
     <el-table-column
       label="创建时间"
       sortable
       align="center"
       header-align="center"
+      width="120"
       prop="date">
     </el-table-column>
 
     <el-table-column
-      v-for="(val,key) in tableLabel"
-      :key="key"
-      :prop="key"
-      :label="val"
+      v-for="item in tableLabel"
+      :key="item.id"
+      :prop="item.id"
+      :label="item.text"
       align="center"
       header-align="center"
+      :width=item.width
       >
     </el-table-column>
 
@@ -25,12 +28,12 @@
       label="操作"
       align="center"
       header-align="center"
+      width="130px"
       >
       <template>
         <div class="operation">
             <el-link type="primary" class="l-content">修改</el-link>
-            <br>
-            <el-link type="danger" class="r-content">删除</el-link>
+            <el-link type="danger" class="r-content" style="margin-left: 10px">删除</el-link>
         </div>
       </template>
     </el-table-column>
@@ -45,7 +48,6 @@ el-table{
 .el-table-column{
     display: flex;
     .l-content{
-        display: flex;
         align-items: center;
         .el-button{
             margin-right: 20px;
@@ -71,13 +73,29 @@ import { getData } from '../../api/data.js';
     data() {
       return {
         tableData: [],
-        tableLabel: {
+        tableLabel: [
             //date: '创建时间',
-            name: '课程名称',
-            classification: '课程类别',
-            point:'学分',
-            teacher:'教师'
-        },
+          {
+            text: '课程名称',
+            width: 250,
+            id: 'name'
+          },
+          {
+            text: '课程类别',
+            width: 100,
+            id: 'classification'
+          },
+          {
+            text: '学分',
+            width: 50,
+            id:  'point'
+          },
+          {
+            text: '主讲教师',
+            width: 150,
+            id: 'teacher'
+          }
+        ],
         search: ''
       }
     },
@@ -100,3 +118,9 @@ import { getData } from '../../api/data.js';
     }
   }
 </script>
+<style>
+.table{
+  width: fit-content;
+  margin: 30px auto auto 30px;
+}
+</style>

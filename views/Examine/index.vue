@@ -1,26 +1,29 @@
 <template>
   <el-table
     :data="tableData"
-    height="height:100%"
-    style="width: 100%"
+    class="table"
+    stripe
     border>
     <el-table-column
       label="申请时间"
       sortable
       align="center"
       header-align="center"
+      width="120"
       prop="date">
     </el-table-column>
     <el-table-column
       label="课程名称"
       align="center"
       header-align="center"
+      width="300"
       prop="name">
     </el-table-column>
     <el-table-column
       label="详情"
       align="center"
       header-align="center"
+      width="80"
       >
       <template>
         <el-link type="primary">查看</el-link>
@@ -28,12 +31,10 @@
     </el-table-column>
     <el-table-column
       align="center"
-      header-align="center">
+      header-align="center"
+      width="200">
       <template slot="header">
-        <el-input
-          v-model="search"
-          size="mini"
-          placeholder="输入关键字搜索"/>
+        <span>操作</span>
       </template>
       <template slot-scope="scope">
         <el-button
@@ -117,3 +118,9 @@
     },
   }
 </script>
+<style>
+.table{
+  width: fit-content;
+  margin: 30px auto auto 30px;
+}
+</style>
