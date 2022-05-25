@@ -221,7 +221,7 @@ export default{
                 {
                     prop:"curriculum_name",
                     label:"课程名称",
-                    width: 250
+                    width: 300
                 },
                 // {
                 //     prop:"department",
@@ -230,7 +230,7 @@ export default{
                 {
                     prop:"category_label",
                     label:"课程类型",
-                    width: 200
+                    width: 120
                 },
                 // {
                 //     prop:"credit",
@@ -239,7 +239,7 @@ export default{
                 {
                     prop:"teacher",
                     label:"主讲教师",
-                    width: 200
+                    width: 150
                 },
                 {
                     prop:"apply_state_label",
@@ -355,5 +355,8 @@ export default{
     justify-content: space-between;
     align-items: flex-start;//对齐
     margin-top: 20px;
+}
+.application{
+  width: fit-content;
 }
 </style>

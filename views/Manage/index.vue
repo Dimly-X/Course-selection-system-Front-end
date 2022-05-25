@@ -77,12 +77,12 @@ import { getData } from '../../api/data.js';
             //date: '创建时间',
           {
             text: '课程名称',
-            width: 250,
+            width: 300,
             id: 'name'
           },
           {
             text: '课程类别',
-            width: 100,
+            width: 120,
             id: 'classification'
           },
           {

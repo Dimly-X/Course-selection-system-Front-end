@@ -18,7 +18,7 @@ function param2Obj(url) {
 
 let departmentList = ['软件工程学院', '法学院', '马克思主义学院', '经济学院', '社会发展学院', '外语学院', '国际汉语文化学院', '心理与认知科学学院'];
 let categoryList = ['专业必修', '专业任意选修', '学科基础课', '分布式课程', '体育类', '思政类', '英语类'];
-let statusList = ['待处理', '通过', '拒绝'];
+let statusList = ['待处理', '通', '拒绝'];
 let List = []
 const count = 200
 
