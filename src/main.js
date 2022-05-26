@@ -1,7 +1,7 @@
 //整个项目的入口文件
 import Vue from 'vue'
 import App from './App.vue'
-import { Button, Radio, Container, Main, Aside, Header, Menu, Submenu, MenuItem, MenuItemGroup, Icon, Dropdown, DropdownItem, DropdownMenu, Row, Col, Card, Table, TableColumn, Input, Link, Select, Option, Form, FormItem, Switch, DatePicker, Dialog, Pagination, MessageBox, Message } from 'element-ui';
+import { Button, Radio, Container, Main, Aside, Header, Menu, Submenu, MenuItem, MenuItemGroup, Icon, Dropdown, DropdownItem, DropdownMenu, Row, Col, Card, Table, TableColumn, Input, Link, Select, Option, Form, FormItem, Switch, DatePicker, Dialog, Pagination, MessageBox, Message, Descriptions, DescriptionsItem } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/less/index.less'
 
@@ -41,6 +41,8 @@ Vue.use(Switch)
 Vue.use(DatePicker)
 Vue.use(Dialog)
 Vue.use(Pagination)
+Vue.use(Descriptions)
+Vue.use(DescriptionsItem)
 
 
 //因为axios不是插件，所以想使用的话需要把它绑定在vue的prototype这个属性上

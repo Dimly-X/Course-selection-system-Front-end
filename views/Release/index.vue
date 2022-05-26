@@ -2,7 +2,7 @@
     <div>
         <div class="sticky">
             <el-dialog 
-                :title='请选择期末分数占比'
+                title="请选择期末分数占比"
                 :visible.sync="isShow"
             >
             <!-- 通过ref拿到当前组件的实例 -->
@@ -19,15 +19,15 @@
             </el-dialog>
 
             <br>请选择要发布成绩的课程：
-            <el-select v-model="class_selected" placeholder="请选择" @change="changeData()">
+            <el-select v-model="class_selected" placeholder="请选择" @change="changeData">
                 <el-option
-                v-for="item in releaseList"
-                :key="item.curriculum_id"
-                :label="item.curriculum_name"
-                :value="item.curriculum_id">
+                    v-for="item in releaseList"
+                    :key="item.curriculum_id"
+                    :label="item.curriculum_name"
+                    :value="item.curriculum_id">
                 </el-option>
             </el-select>
-            <el-button type="primary" class="button" @click="editStrategy">编辑计分规则</el-button>
+            <el-button type="primary" class="buttonEdit" @click="editStrategy">编辑计分规则</el-button>
         </div>
         
         <div style="position:relative" class="table">
@@ -143,10 +143,12 @@ export default{
         ChangeUsual(row){
             console.log("row",row);
             //后端
+            //changeData
         },
         ChangeFinal(row){
             console.log("row",row);
             //后端
+            //changeData
         }
     },
     created() {
@@ -173,7 +175,7 @@ export default{
 .input2{
     width: 80px;
 }
-.button{
+.buttonEdit{
     margin: 0 0 0 20px;
 }
 </style>

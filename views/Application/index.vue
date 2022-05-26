@@ -48,6 +48,7 @@
 import CommonForm from '@/components/CommonForm'
 import CommonTable from '@/components/CommonTable.vue'
 import { getApplication } from '../../api/data'
+import CurriculumDetail from '../curriculumDetail/curriculumDetail.vue'
 
 export default{
     name:'Application',
@@ -316,7 +317,11 @@ export default{
             })
         },
         lookApplication(row){
-            
+            console.log("before",row)
+            this.$router.push({
+                name: 'curriculumDetail',
+                query: { curriculum: JSON.parse(JSON.stringify(row)) }
+            })
         },
         editApplication(row){
             this.isShow = true

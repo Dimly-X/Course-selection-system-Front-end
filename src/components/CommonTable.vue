@@ -21,8 +21,8 @@
             header-align="center"
             :width="70"
         >
-          <template>
-            <el-link type="primary" @click="handleLook">查看</el-link>
+          <template slot-scope="scope">
+            <el-link type="primary" @click="handleLook(scope.row)">查看</el-link>
           </template>
         </el-table-column>
         <el-table-column
