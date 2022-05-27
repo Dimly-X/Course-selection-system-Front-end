@@ -82,7 +82,7 @@ export default {
           this.$store.commit('setMenu', res.data.menu)
           this.$store.commit('setToken', res.data.token)
           this.$store.commit('addMenu', this.$router)
-          this.$router.push({name: 'home'})
+          this.$router.push({name: 'Main'})
         } else {
           this.$message.warning(res.data.message)
         }

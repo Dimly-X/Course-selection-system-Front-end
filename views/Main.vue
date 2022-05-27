@@ -18,7 +18,6 @@
 
 import CommonAside from '../src/components/CommonAside.vue'
 import CommonHeader from '@/components/CommonHeader'
-
 export default{
     name:'Home',
     components:{
@@ -27,6 +26,11 @@ export default{
     },
     data(){
         return{}
+    },
+    created() {
+      this.$router.push({
+        name: 'home'
+      })
     }
 }
 </script>
