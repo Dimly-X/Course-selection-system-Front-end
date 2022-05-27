@@ -53,7 +53,7 @@ Vue.prototype.$message = Message
 router.beforeEach((to, from, next) => {
     store.commit('getToken')
     const token = store.state.user.token
-    if (!token && to.name != 'login') {
+    if (!token && to.name !== 'login') {
         next({ name: 'login' })
     } else if (token && to.name === 'login') {
         next({ name: 'home' })
@@ -62,7 +62,6 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-
 new Vue({
     router,
     store,
@@ -70,5 +69,6 @@ new Vue({
     created() {
         //动态路由设置，这样每次刷新都会去调用
         this.$store.commit('addMenu', router)
+        this.$store.state.courses = ['a']
     }
 }).$mount('#app')

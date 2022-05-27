@@ -1,5 +1,5 @@
 <template>
-    <el-menu default-active="1-4-1"
+    <el-menu default-active="/"
              class="el-menu-vertical-demo"
              background-color="#545c64"
              text-color="#fff"
@@ -8,7 +8,7 @@
              @close="handleClose"
              :collapse="isCollapse">
      <h3 style="white-space:nowrap">{{isCollapse ? '数据库' : '华东师范大学数据库'}}</h3>
-    <el-menu-item @click="clickMenu(item)" v-for="item in noChildren" :index="item.path" :key="item.path">
+    <el-menu-item @click="clickMenu(item)" v-for="item in noChildren" :index="item.path" :key="item.path" >
          <i :class="'el-icon' + '-' + item.icon"></i>
         <span slot="title">{{item.label}}</span>
     </el-menu-item>
@@ -100,7 +100,6 @@
           name: item.name
         })
       }
-
     },
     //计算属性
     computed:{
