@@ -48,11 +48,8 @@
 import CommonForm from '@/components/CommonForm'
 import CommonTable from '@/components/CommonTable.vue'
 import { getApplication } from '../../api/data'
-<<<<<<< Updated upstream
 import CurriculumDetail from '../curriculumDetail/curriculumDetail.vue'
 
-=======
->>>>>>> Stashed changes
 export default{
     name:'Application',
     components:{
