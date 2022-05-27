@@ -1,126 +1,367 @@
 <template>
-  <el-table
-    :data="tableData"
-    class="table"
-    stripe
-    border>
-    <el-table-column
-      label="创建时间"
-      sortable
-      align="center"
-      header-align="center"
-      width="120"
-      prop="date">
-    </el-table-column>
-
-    <el-table-column
-      v-for="item in tableLabel"
-      :key="item.id"
-      :prop="item.id"
-      :label="item.text"
-      align="center"
-      header-align="center"
-      :width=item.width
-      >
-    </el-table-column>
-
-    <el-table-column
-      label="操作"
-      align="center"
-      header-align="center"
-      width="130px"
-      >
-      <template>
-        <div class="operation">
-            <el-link type="primary" class="l-content">修改</el-link>
-            <el-link type="danger" class="r-content" style="margin-left: 10px">删除</el-link>
+    <div class="application">
+        <el-dialog 
+            :title="operateType === 'add' ? '新课程创建' : '编辑课程' "
+            :visible.sync="isShow"
+        >
+        <!-- 通过ref拿到当前组件的实例 -->
+            <common-form
+                :formLabel="operateFormLabel"
+                :form="operateForm"
+                :inline="false"
+                ref="form"
+            ></common-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="isShow = false">取消</el-button>
+                <el-button type="primary" @click="confirm">提交</el-button>
+            </div>
+        </el-dialog>
+        <div class="application-header" >
+            <el-button type="primary" @click="newApplication">+ 课程</el-button>
+            <common-form
+                :formLabel="searchFormLabel"
+                :form="searchForm"
+                :inline="true"
+                ref="form"
+            >
+                <el-button type="primary" @click="getList(searchForm.keyword)">搜索</el-button>
+            </common-form>
         </div>
-      </template>
-    </el-table-column>
-  </el-table>
+        <div>
+            <common-table
+                :tableData="tableData"
+                :tableLabel="tableLabel"
+                :config="config"
+
+                @changePage="getList()"
+                @look="lookApplication"
+                @edit="editApplication"
+                @del="delApplication"
+            >
+            </common-table>
+        </div>
+    </div>
 </template>
-
-<style lang="less" scoped>
-
-el-table{
-    display: flex;
-}
-.el-table-column{
-    display: flex;
-    .l-content{
-        align-items: center;
-        .el-button{
-            margin-right: 20px;
-        }
-    }
-    .r-content{
-        .user{
-            width:40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-    }
-}
-
-</style>
-
 
 <script>
 
-import { getData } from '../../api/data.js';
+import CommonForm from '@/components/CommonForm'
+import CommonTable from '@/components/CommonTable.vue'
+import { getApplication } from '../../api/data'
+import CurriculumDetail from '../curriculumDetail/curriculumDetail.vue'
 
-  export default {
-    data() {
-      return {
-        tableData: [],
-        tableLabel: [
-            //date: '创建时间',
-          {
-            text: '课程名称',
-            width: 300,
-            id: 'name'
-          },
-          {
-            text: '课程类别',
-            width: 120,
-            id: 'classification'
-          },
-          {
-            text: '学分',
-            width: 50,
-            id:  'point'
-          },
-          {
-            text: '主讲教师',
-            width: 150,
-            id: 'teacher'
-          }
-        ],
-        search: ''
-      }
+export default{
+    name:'Manage',
+    components:{
+        CommonForm,
+        CommonTable
     },
-    methods: {
-      handleEdit(index, row) {
-        console.log(index, row);
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
-      }
-    },
-    mounted(){
-        getData().then(res => {
-            const{ code, data } = res.data
-            if(code === 20000){
-                this.tableData = data.tableData
+    data(){
+        return{
+            operateType: 'add',
+            isShow: false,
+            operateFormLabel: [
+                    {
+                        model: 'curriculum_name',
+                        label: '课程名称',
+                        type: 'input'
+                    },
+                    {
+                        model: 'department',
+                        label: '开设院系',
+                        type: 'multiSelect',
+                        opts: [
+                            {
+                                label: '软件工程学院',
+                                value: 0
+                            },
+                            {
+                                label: '法学院',
+                                value: 1
+                            },
+                            {
+                                label: '马克思主义学院',
+                                value: 2
+                            },
+                            {
+                                label: '经济学院',
+                                value: 3
+                            },
+                            {
+                                label: '社会发展学院',
+                                value: 4
+                            },
+                            {
+                                label: '外语学院',
+                                value: 5
+                            },
+                            {
+                                label: '国际汉语文化学院',
+                                value: 6
+                            },
+                            {
+                                label: '心理与认知科学学院',
+                                value: 7
+                            }
+                        ]
+                    },
+                    {
+                        model: 'category',
+                        label: '课程类别',
+                        type: 'select',
+                        opts: [
+                            {
+                                label: '专业必修',
+                                value: 0
+                            },
+                            {
+                                label: '专业任意选修',
+                                value: 1
+                            },
+                            {
+                                label: '学科基础课',
+                                value: 2
+                            },
+                            {
+                                label: '分布式课程',
+                                value: 3
+                            },
+                            {
+                                label: '体育类',
+                                value: 4
+                            },
+                            {
+                                label: '思政类',
+                                value: 5
+                            },
+                            {
+                                label: '英语类',
+                                value: 6
+                            }
+                        ]
+                    },
+                    {
+                        model: 'credit',
+                        label: '学分',
+                        type: 'input'
+                    },
+                    {
+                        model: 'teacher',
+                        label: '教师',
+                        type: 'input'
+                    },
+                    {
+                        model: 'semester',
+                        label: '开课学期',
+                        type: 'select',
+                        opts: [
+                            {
+                                label: '2021-2022 1',
+                                value: 0
+                            },
+                            {
+                                label: '2021-2022 2',
+                                value: 1
+                            },
+                            {
+                                label: '2021-2022 3',
+                                value: 2
+                            }
+                        ]
+                    },
+                    {
+                        model: 'upper_limit',
+                        label: '人数上限',
+                        type: 'input'
+                    },
+                    {
+                        model: 'requirement',
+                        label: '课程要求',
+                        type: 'textInput'
+                    },
+                    {
+                        model: 'introduction',
+                        label: '课程简介',
+                        type: 'textInput'
+                    },
+                    {
+                        model: 'remark',
+                        label: '备注',
+                        type: 'textInput'
+                    }
+                ],
+            //双向绑定↓
+            operateForm: {
+                curriculum_name: '',
+                department: '',
+                category: '',
+                credit: '',
+                teacher: '',
+                requirement: '',
+                introduction: '',
+                remark: '',
+                apply_state: '',
+            },
+            searchFormLabel: [
+                {
+                    model: 'keyword',
+                    label: '',
+                    type: 'input'
+                }
+            ],
+            searchForm: {
+                keyword: ''
+            },
+            tableData:[],
+            tableLabel:[
+                {
+                    prop:"create_time",
+                    label:"创建时间",
+                    width: 120
+                },
+                {
+                    prop:"curriculum_name",
+                    label:"课程名称",
+                    width: 300
+                },
+                // {
+                //     prop:"department",
+                //     label:"开设院系"
+                // },
+                {
+                    prop:"category_label",
+                    label:"课程类型",
+                    width: 120
+                },
+                // {
+                //     prop:"credit",
+                //     label:"学分"
+                // },
+                {
+                    prop:"teacher",
+                    label:"主讲教师",
+                    width: 150
+                },
+                {
+                    prop:"credit",
+                    label:"学分",
+                    width: 50
+                }
+               ],
+            config: {
+                total: 30,
+                page: 1
             }
-            console.log(res)
-        })
+        }
+    },
+    methods:{
+        confirm(){
+            // 要说明的是，这里不是调用了接口吗，真正的接口定义应该是在/api/data.js里
+            // 但是因为我是用mock模拟的接口，所以这里暂时是在mock.js里面把接口拦住了（之前课程管理页也是用的这个方法）
+            if (this.operateType === 'edit'){
+                this.$http.post('/application/edit', this.operateForm).then(res => {
+                    console.log(this.operateForm)
+                    console.log(res)
+                    this.isShow= false
+                    this.getList()
+                })
+            } else {
+                this.$http.post('/application/add', this.operateForm).then(res => {
+                    console.log(this.operateForm)
+                    console.log(res)
+                    this.isShow= false
+                    this.getList()
+                })
+            }
+        },
+        newApplication(){
+            this.isShow = true
+            this.operateType = 'add'
+            this.operateForm = {
+                curriculum_name: '',
+                department: '',
+                category: '',
+                credit: '',
+                teacher: '',
+                semester:'',
+                upper_limit:'',
+                requirement: '',
+                introduction: '',
+                remark: ''
+            }
+        },
+
+        getList(curriculum_name = ''){
+            console.log("aaa","aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            this.config.loading =true
+            curriculum_name ? (this.config.page = 1) : '' //搜索
+            getApplication({
+                page: this.config.page,
+                curriculum_name
+            }).then(({ data:res }) => {
+                console.log(res,'res')
+                //回调函数，res是接口的响应值
+                this.tableData = res.list.map(item => {
+                  //  item.sexLabel = item.sex === 0 ? "女" : "男"
+                    let departmentList = ['软件工程学院','法学院','马克思主义学院','经济学院','社会发展学院','外语学院','国际汉语文化学院','心理与认知科学学院'];
+                    let categoryList = ['专业必修','专业任意选修','学科基础课','分布式课程','体育类','思政类','英语类'];
+                    let statusList = ['待处理','通过','拒绝'];
+                   // item.department = departmentList[item.department];
+                    item.category_label = categoryList[item.category];
+                    item.apply_state_label = statusList[item.apply_state];
+                    return item
+                })
+                this.config.total = res.count
+                this.config.loading = false
+
+            })
+        },
+        lookApplication(row){
+            console.log("before",row)
+            this.$router.push({
+                name: 'curriculumDetail',
+                query: { curriculum: JSON.parse(JSON.stringify(row)) }
+            })
+        },
+        editApplication(row){
+            this.isShow = true
+            this.operateType = 'edit'
+            this.operateForm = JSON.parse(JSON.stringify(row));//不能直接=row，因为这是vue 的双向数据绑定的弊端，实时更新数据，因为是一个数据源，因为在修改对象的时候，对象的指针直接指向页面数据了
+        },
+        delApplication(row){
+            this.$confirm("此操作将永久删除该课程，是否继续？","提示",{
+                confirmButtonText:"确认",
+                cancelButtonText:"取消",
+                type:"warning"
+            }).then( () => {
+                const apply_id = row.apply_id
+                this.$http.post("/application/del",{
+                    params: { apply_id }
+                }).then(() =>{
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功'
+                    })
+                    this.getList()
+                })
+            })
+        },
+    },
+    //（生命周期）创造的时候就要调用
+    created() {
+        this.getList() 
     }
-  }
+}
 </script>
-<style>
-.table{
+
+<style lang="less" scoped>
+.application-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;//对齐
+    margin-top: 20px;
+}
+.application{
   width: fit-content;
-  margin: 30px auto auto 30px;
 }
 </style>

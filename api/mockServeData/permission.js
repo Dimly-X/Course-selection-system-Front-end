@@ -32,6 +32,13 @@ export default {
                             label: '新课程审核',
                             icon: 'edit',
                             url: 'Examine/index'
+                        },
+                        {
+                            path: '/enrollmentRelease',
+                            name: 'enrollmentRelease',
+                            label: '选课时间发布',
+                            icon: 'document-checked',
+                            url: 'EnrollmentRelease/enrollmentRelease'
                         }
                     ],
                     token: Mock.Random.guid(),

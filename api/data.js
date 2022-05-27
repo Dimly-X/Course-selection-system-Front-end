@@ -23,6 +23,14 @@ export const getApplication = (params) => {
     })
 }
 
+export const getEnrollment = (params) => {
+    return axios.request({
+        url: '/enrollment/getEnrollment',
+        method: 'get',
+        params
+    })
+}
+
 export const getRelease = () => {
     return axios.request({
         url: 'http://localhost:8080/register/getRelease',
