@@ -10,6 +10,7 @@ export default {
             Cookie.set('token', val)
         },
         clearToken(state) {
+            console.log("tag",state)
             state.token = ''
             Cookie.remove('token')
         },

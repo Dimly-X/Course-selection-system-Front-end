@@ -71,7 +71,6 @@ const routes = [{
     }
 ]
 
-
 //相关配置
 const router = new VueRouter({
     mode: 'history',

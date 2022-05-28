@@ -50,6 +50,7 @@ export default {
      * @return {{code: number, count: number, data: *[]}}
      */
     getApplicationList: config => {
+        console.log("get",JSON.stringify(config))
         const { curriculum_name, page = 1, limit = 10 } = param2Obj(config.url)
         console.log('name:' + curriculum_name, 'page:' + page, '分页大小limit:' + limit)
         const mockList = List.filter(application => {

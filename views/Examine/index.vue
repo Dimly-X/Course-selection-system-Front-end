@@ -1,5 +1,5 @@
 <template>
-    <div class="outer">
+    <div class="examine_outer application">
       <div class="common-table">
         <el-table :data="tableData" stripe border>
           <el-table-column
@@ -172,12 +172,12 @@ export default{
 <style lang="less" scoped>
 .application{
   width: fit-content;
-  margin: 30px auto auto 30px;
+  margin: 30px auto auto 10px;
 }
 .pager {
   margin-top: 5px;
 }
-.outer{
+.examine_outer{
   width: fit-content;
   display: flex;
   flex-direction: column;

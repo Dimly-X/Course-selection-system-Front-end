@@ -5,14 +5,13 @@
                 <div class="user">
                     <img :src="userImg" />
                     <div class="userinfo">
-                        <p class="name" >Admin</p>
-                        <p class="access">超级管理员</p>
+                        <p class="name" >{{ data.personal_name }}</p>
+                        <p class="access">{{ data.user_role }}</p>
                     </div>
                 </div>
                 <div class="login-info">
-                    <p>上次登录时间:<span>2021-7-19</span></p>
-                    <p>上次登录地点:<span>武汉</span></p>
-
+                    <p>院系:<span>{{ data.user_school }}</span></p>
+                    <p>编号:<span>{{ data.user_id }}</span></p>
                 </div>
             </el-card>
         </el-col>
@@ -20,22 +19,34 @@
 </template>
 
 <script>
-import { getData } from '../../api/data.js';
-
+import { getHomeData } from '../../api/data.js';
+import { getData } from '../../api/data.js'
+import CONST from '@/assets/consts'
 export default{
     name:'Home',
     data(){
-        return{
-            userImg: require('@/assets/images/commonPortrait.png')
+      return{
+            userImg: require('@/assets/images/commonPortrait.png'),
+            data: {
+              personal_name: '',
+              user_role: '',
+              user_school: '',
+              user_id: ''
+            }
         }
     },
     mounted(){
-        getData().then(res => {
-            const{ code, data } = res.data
-            if(code === 20000){
-                this.tableData = data.tableData
-            }
-            console.log(res)
+        getHomeData().then(res => {
+          this.data = getData(res.data)
+          if(this.data.user_role === CONST.USER_ROLE.ADMIN){
+            this.data.user_role = '教务'
+          }else if(this.data.user_role === CONST.USER_ROLE.TEACHER){
+            this.data.user_role = '教师'
+          }else if(this.data.user_role === CONST.USER_ROLE.STUDENT){
+            this.data.user_role = '学生'
+          }else{
+            this.data.user_role = '未知'
+          }
         })
     }
 }

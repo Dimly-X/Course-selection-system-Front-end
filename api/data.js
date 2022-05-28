@@ -1,4 +1,16 @@
 import axios from './axios';
+import CONST from "@/assets/consts";
+import user from "@/store/user";
+import router from "../router";
+
+export const getCurriculumDetail = (params) => {
+    console.log("para",JSON.stringify(params))
+    return axios.request({
+        url: '/application/curriculum/detail',
+        method: 'get',
+        params
+    })
+}
 
 export const getMenu = (param) => {
     return axios.request({
@@ -8,9 +20,9 @@ export const getMenu = (param) => {
     })
 }
 
-export const getData = () => {
+export const getHomeData = () => {
     return axios.request({
-        url: '/home/getData',
+        url: '/home',
         method: 'get'
     })
 }
@@ -44,4 +56,28 @@ export const getStudentList = (params) => {
         method: 'get',
         params
     })
+}
+export const getData = (datapackage) => {
+    if (datapackage.code === CONST.RESPONSE_CODE.ACCEPTED) {
+        return datapackage.data
+    }
+    if (datapackage.code === CONST.RESPONSE_CODE.EXCEPTION) {
+        if (datapackage.message) {
+            alert(datapackage.message)
+        } else {
+            alert(CONST.STRING.ERROR);
+        }
+        return null
+    }
+    if (datapackage.code === CONST.RESPONSE_CODE.UNAUTHORIZED) {
+        if (datapackage.message) {
+            alert(datapackage.message)
+        } else {
+            alert(CONST.STRING.UNAUTHORIZED);
+        }
+        user.mutations.clearToken(user.state)
+        router.push({
+            name: 'login'
+        })
+    }
 }

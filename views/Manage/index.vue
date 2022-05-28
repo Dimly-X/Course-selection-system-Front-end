@@ -317,11 +317,12 @@ export default{
             })
         },
         lookApplication(row){
-            console.log("before",row)
-            this.$router.push({
+            console.log("before",JSON.parse(JSON.stringify(row)))
+            const to = this.$router.resolve({
                 name: 'curriculumDetail',
-                query: { curriculum: JSON.parse(JSON.stringify(row)) }
+                query: { apply_id: row.apply_id }
             })
+            window.open(to.href, '_blank')
         },
         editApplication(row){
             this.isShow = true

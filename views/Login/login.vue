@@ -50,7 +50,7 @@
 
 import Mock from 'mockjs'
 import {getMenu} from '../../api/data'
-
+import {getData} from '../../api/data'
 export default {
   name: 'Login',
   data() {
@@ -76,15 +76,17 @@ export default {
     login() {
       //then就是说，调用接口之后会得到回应,res是接口的返回
       //{ data:res }这里是es6的语法，是把data先从res里面解构出来，让它（之前的res.data）作为res
-      getMenu(this.form).then(({data: res}) => {
-        if (res.code === 20000) {
+      getMenu(this.form).then((res) => {
+        const data = getData(res.data);
+        console.log("res",JSON.stringify(data))
+        if (data.status === true) {
           this.$store.commit('clearMenu')
-          this.$store.commit('setMenu', res.data.menu)
-          this.$store.commit('setToken', res.data.token)
+          this.$store.commit('setMenu', data.menu)
+          this.$store.commit('setToken', data.token)
           this.$store.commit('addMenu', this.$router)
           this.$router.push({name: 'Main'})
         } else {
-          this.$message.warning(res.data.message)
+          this.$message.warning(data.message)
         }
       })
       // const token = Mock.random.guid()

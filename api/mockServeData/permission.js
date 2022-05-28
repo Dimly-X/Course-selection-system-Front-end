@@ -1,6 +1,7 @@
 import Mock from 'mockjs'
+import CONST from '@/assets/consts'
 export default {
-    getMenu: config => {
+    getMenu: (config) => {
         console.log(config);
         const { user_name, password } = JSON.parse(config.body)
         console.log(JSON.parse(config.body))
@@ -10,8 +11,9 @@ export default {
         console.log("password", password)
         if (user_name === 'admin' && password === 'admin') {
             return {
-                code: 20000,
+                code: CONST.RESPONSE_CODE.ACCEPTED,
                 data: {
+                    status: true,
                     menu: [{
                             path: '/',
                             name: 'home',
@@ -47,8 +49,9 @@ export default {
             }
         } else if (user_name === 'teacher' && password === 'teacher') {
             return {
-                code: 20000,
+                code: CONST.RESPONSE_CODE.ACCEPTED,
                 data: {
+                    status: true,
                     menu: [{
                             path: '/',
                             name: 'home',
@@ -77,8 +80,9 @@ export default {
             }
         } else if (user_name === 'student' && password === 'student') {
             return {
-                code: 20000,
+                code: CONST.RESPONSE_CODE.ACCEPTED,
                 data: {
+                    status: true,
                     menu: [{
                             path: '/',
                             name: 'home',
@@ -107,8 +111,9 @@ export default {
             }
         } else {
             return {
-                code: -999,
+                code: CONST.RESPONSE_CODE.ACCEPTED,
                 data: {
+                    status: false,
                     message: '密码错误'
                 }
             }
