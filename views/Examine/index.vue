@@ -102,7 +102,6 @@ export default{
     },
     methods:{
         getList(curriculum_name = ''){
-            console.log("aaa","aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             this.config.loading =true
             curriculum_name ? (this.config.page = 1) : '' //搜索
             getApplication({

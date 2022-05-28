@@ -3,6 +3,9 @@ import CONST from "@/assets/consts";
 import user from "@/store/user";
 import router from "../router";
 
+/**
+ * Appliaction
+ */
 export const responseToApplication = (para) => {
     return axios.request({
         url: '/application/deal',
@@ -10,6 +13,14 @@ export const responseToApplication = (para) => {
         para
     })
 }
+export const getApplication = (params) => {
+    return axios.request({
+        url: '/application/getApplication',
+        method: 'get',
+        params
+    })
+}
+
 
 export const getCurriculumDetail = (params) => {
     console.log("para", JSON.stringify(params))
@@ -20,6 +31,42 @@ export const getCurriculumDetail = (params) => {
     })
 }
 
+/**
+ * Curriculum
+ */
+export const getCurriculum = (params) => {
+    return axios.request({
+        url: '/curriculum/getCurriculum',
+        method: 'get',
+        params
+    })
+}
+export const delCurriculum = (params) => {
+    return axios.request({
+        url: '/curriculum/del',
+        method: 'post',
+        data: params
+    })
+}
+export const editCurriculum = (params) => {
+    return axios.request({
+        url: '/curriculum/edit',
+        method: 'post',
+        data: params
+    })
+}
+export const createCurriculum = (params) => {
+    return axios.request({
+        url: '/curriculum/add',
+        method: 'post',
+        data: params
+    })
+}
+
+
+/**
+ * Menu
+ */
 export const getMenu = (param) => {
     return axios.request({
         url: '/permission/getMenu',
@@ -28,6 +75,9 @@ export const getMenu = (param) => {
     })
 }
 
+/**
+ * Home
+ */
 export const getHomeData = () => {
     return axios.request({
         url: '/home',
@@ -35,14 +85,9 @@ export const getHomeData = () => {
     })
 }
 
-export const getApplication = (params) => {
-    return axios.request({
-        url: '/application/getApplication',
-        method: 'get',
-        params
-    })
-}
-
+/**
+ * Enrollment
+ */
 export const getEnrollment = (params) => {
     return axios.request({
         url: '/enrollment/getEnrollment',
@@ -51,6 +96,9 @@ export const getEnrollment = (params) => {
     })
 }
 
+/**
+ * Score
+ */
 export const getScore = (params) => {
     console.log("data.js", params)
     return axios.request({
@@ -60,6 +108,9 @@ export const getScore = (params) => {
     })
 }
 
+/**
+ * ScoreRelease
+ */
 export const getRelease = () => {
     return axios.request({
         url: 'http://localhost:8080/register/getRelease',
@@ -74,6 +125,7 @@ export const getStudentList = (params) => {
         params
     })
 }
+
 export const getData = (datapackage) => {
     if (datapackage.code === CONST.RESPONSE_CODE.ACCEPTED) {
         return datapackage.data

@@ -47,8 +47,14 @@
 
 import CommonForm from '@/components/CommonForm'
 import CommonTable from '@/components/CommonTable.vue'
-import { getApplication } from '../../api/data'
+import { getCurriculum } from '../../api/data'
+import { delCurriculum } from '../../api/data'
+import { editCurriculum } from '../../api/data'
+import { createCurriculum } from '../../api/data'
+
+import {getData} from '../../api/data'
 import CurriculumDetail from '../curriculumDetail/curriculumDetail.vue'
+import CONST from '@/assets/consts'
 
 export default{
     name:'Manage',
@@ -259,18 +265,28 @@ export default{
             // 要说明的是，这里不是调用了接口吗，真正的接口定义应该是在/api/data.js里
             // 但是因为我是用mock模拟的接口，所以这里暂时是在mock.js里面把接口拦住了（之前课程管理页也是用的这个方法）
             if (this.operateType === 'edit'){
-                this.$http.post('/application/edit', this.operateForm).then(res => {
-                    console.log(this.operateForm)
-                    console.log(res)
-                    this.isShow= false
-                    this.getList()
+                editCurriculum(
+                    {operateForm: this.operateForm}
+                ).then(res => {
+                    const data = getData(res.data);
+                    if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
+                        this.isShow= false
+                        this.getList()
+                    }else{
+                        this.$message.warning(data.message)
+                    }
                 })
             } else {
-                this.$http.post('/application/add', this.operateForm).then(res => {
-                    console.log(this.operateForm)
-                    console.log(res)
-                    this.isShow= false
-                    this.getList()
+                createCurriculum(
+                    {operateForm: this.operateForm}
+                ).then(res => {
+                    const data = getData(res.data);
+                    if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
+                        this.isShow= false
+                        this.getList()
+                    }else{
+                        this.$message.warning(data.message)
+                    }
                 })
             }
         },
@@ -292,28 +308,23 @@ export default{
         },
 
         getList(curriculum_name = ''){
-            console.log("aaa","aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             this.config.loading =true
             curriculum_name ? (this.config.page = 1) : '' //搜索
-            getApplication({
+            getCurriculum({
                 page: this.config.page,
                 curriculum_name
-            }).then(({ data:res }) => {
-                console.log(res,'res')
-                //回调函数，res是接口的响应值
-                this.tableData = res.list.map(item => {
-                  //  item.sexLabel = item.sex === 0 ? "女" : "男"
-                    let departmentList = ['软件工程学院','法学院','马克思主义学院','经济学院','社会发展学院','外语学院','国际汉语文化学院','心理与认知科学学院'];
-                    let categoryList = ['专业必修','专业任意选修','学科基础课','分布式课程','体育类','思政类','英语类'];
-                    let statusList = ['待处理','通过','拒绝'];
-                   // item.department = departmentList[item.department];
-                    item.category_label = categoryList[item.category];
-                    item.apply_state_label = statusList[item.apply_state];
-                    return item
-                })
-                this.config.total = res.count
-                this.config.loading = false
-
+            }).then((res) => {
+                const data = getData(res.data);
+                if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
+                    this.tableData = data.list.map(item => {
+                        item.category_label = CONST.categoryList[item.category];
+                        return item
+                    })
+                    this.config.total = data.count
+                    this.config.loading = false
+                }else{
+                    this.$message.warning(data.message)
+                }
             })
         },
         lookApplication(row){
@@ -335,15 +346,20 @@ export default{
                 cancelButtonText:"取消",
                 type:"warning"
             }).then( () => {
-                const apply_id = row.apply_id
-                this.$http.post("/application/del",{
-                    params: { apply_id }
-                }).then(() =>{
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功'
-                    })
-                    this.getList()
+                const curriculum_id = row.curriculum_id
+                delCurriculum({
+                    curriculum_id: curriculum_id
+                }).then((res) =>{
+                    const data = getData(res.data);
+                    if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功'
+                        })
+                        this.getList()
+                    }else{
+                        this.$message.warning(data.message)
+                    }
                 })
             })
         },

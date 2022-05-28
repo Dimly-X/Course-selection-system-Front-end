@@ -230,6 +230,7 @@ export default{
                     label:"课程类型",
                     width: 120
                 },
+
                 {
                     prop:"teacher",
                     label:"主讲教师",
