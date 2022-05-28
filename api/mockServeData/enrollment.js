@@ -23,24 +23,21 @@ List.push(
     Mock.mock({
         enrollment_id: Mock.Random.guid(),
         enrollment_name: "第一轮选课",
-        start_time: Mock.Random.datetime(),
-        end_time: Mock.Random.datetime()
+        enrollment_time: ["2022-05-03T16:00:00.000Z", "2022-06-28T16:00:00.000Z"],
     })
 )
 List.push(
     Mock.mock({
         enrollment_id: Mock.Random.guid(),
         enrollment_name: "第二轮选课",
-        start_time: Mock.Random.datetime(),
-        end_time: Mock.Random.datetime()
+        enrollment_time: ["2022-05-03T16:00:00.000Z", "2022-06-28T16:00:00.000Z"],
     })
 )
 List.push(
     Mock.mock({
         enrollment_id: Mock.Random.guid(),
         enrollment_name: "第三轮选课",
-        start_time: Mock.Random.datetime(),
-        end_time: Mock.Random.datetime()
+        enrollment_time: ["2022-05-03T16:00:00.000Z", "2022-06-28T16:00:00.000Z"],
     })
 )
 
@@ -69,13 +66,12 @@ export default {
      * @return {{code: number, data: {message: string}}}
      */
     createEnrollment: config => {
-        const { enrollment_name, start_time, end_time } = JSON.parse(config.body)
+        const { enrollment_name, enrollment_time } = JSON.parse(config.body)
         console.log(JSON.parse(config.body))
         List.unshift({
             enrollment_id: Mock.Random.guid(),
             enrollment_name: enrollment_name,
-            start_time: start_time,
-            end_time: end_time
+            enrollment_time: enrollment_time
         })
         return {
             code: 20000,
@@ -92,7 +88,7 @@ export default {
     deleteEnrollment: config => {
         //const { apply_id } = param2Obj(config.url)
         const body = JSON.parse(config.body)
-        const enrollment_id = body.params.enrollment;
+        const enrollment_id = body.params.enrollment_id;
         if (!enrollment_id) {
             return {
                 code: -999,
@@ -113,12 +109,11 @@ export default {
      * @return {{code: number, data: {message: string}}}
      */
     updateEnrollment: config => {
-        const { enrollment_id, enrollment_name, start_time, end_time } = JSON.parse(config.body)
+        const { enrollment_id, enrollment_name, enrollment_time } = JSON.parse(config.body)
         List.some(u => {
             if (u.enrollment_id === enrollment_id) {
                 u.enrollment_name = enrollment_name
-                u.start_time = start_time
-                u.end_time = end_time
+                u.enrollment_time = enrollment_time
                 console.log("编辑完成", u.apply_state)
                 return true
             }
