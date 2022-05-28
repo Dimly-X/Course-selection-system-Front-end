@@ -49,6 +49,7 @@ import CommonForm from '@/components/CommonForm'
 import CommonTable from '@/components/CommonTable.vue'
 import { getApplication } from '../../api/data'
 import CurriculumDetail from '../curriculumDetail/curriculumDetail.vue'
+import CONST from '@/assets/consts'
 
 export default{
     name:'Application',
@@ -224,19 +225,11 @@ export default{
                     label:"课程名称",
                     width: 300
                 },
-                // {
-                //     prop:"department",
-                //     label:"开设院系"
-                // },
                 {
                     prop:"category_label",
                     label:"课程类型",
                     width: 120
                 },
-                // {
-                //     prop:"credit",
-                //     label:"学分"
-                // },
                 {
                     prop:"teacher",
                     label:"主讲教师",
@@ -256,8 +249,6 @@ export default{
     },
     methods:{
         confirm(){
-            // 要说明的是，这里不是调用了接口吗，真正的接口定义应该是在/api/data.js里
-            // 但是因为我是用mock模拟的接口，所以这里暂时是在mock.js里面把接口拦住了（之前课程管理页也是用的这个方法）
             if (this.operateType === 'edit'){
                 this.$http.post('/application/edit', this.operateForm).then(res => {
                     console.log(this.operateForm)
@@ -292,7 +283,6 @@ export default{
         },
 
         getList(curriculum_name = ''){
-            console.log("aaa","aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             this.config.loading =true
             curriculum_name ? (this.config.page = 1) : '' //搜索
             getApplication({
@@ -302,18 +292,12 @@ export default{
                 console.log(res,'res')
                 //回调函数，res是接口的响应值
                 this.tableData = res.list.map(item => {
-                  //  item.sexLabel = item.sex === 0 ? "女" : "男"
-                    let departmentList = ['软件工程学院','法学院','马克思主义学院','经济学院','社会发展学院','外语学院','国际汉语文化学院','心理与认知科学学院'];
-                    let categoryList = ['专业必修','专业任意选修','学科基础课','分布式课程','体育类','思政类','英语类'];
-                    let statusList = ['待处理','通过','拒绝'];
-                   // item.department = departmentList[item.department];
-                    item.category_label = categoryList[item.category];
-                    item.apply_state_label = statusList[item.apply_state];
+                    item.category_label = CONST.categoryList[item.category];
+                    item.apply_state_label = CONST.statusList[item.apply_state];
                     return item
                 })
                 this.config.total = res.count
                 this.config.loading = false
-
             })
         },
         lookApplication(row){

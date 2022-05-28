@@ -4,7 +4,7 @@ import user from "@/store/user";
 import router from "../router";
 
 export const getCurriculumDetail = (params) => {
-    console.log("para",JSON.stringify(params))
+    console.log("para", JSON.stringify(params))
     return axios.request({
         url: '/application/curriculum/detail',
         method: 'get',
@@ -38,6 +38,15 @@ export const getApplication = (params) => {
 export const getEnrollment = (params) => {
     return axios.request({
         url: '/enrollment/getEnrollment',
+        method: 'get',
+        params
+    })
+}
+
+export const getScore = (params) => {
+    console.log("data.js", params)
+    return axios.request({
+        url: '/score/getScore',
         method: 'get',
         params
     })
