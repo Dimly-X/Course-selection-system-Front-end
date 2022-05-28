@@ -3,10 +3,18 @@ import CONST from "@/assets/consts";
 import user from "@/store/user";
 import router from "../router";
 
+export const responseToApplication = (para) => {
+    return axios.request({
+        url: '/application/deal',
+        method: 'post',
+        para
+    })
+}
+
 export const getCurriculumDetail = (params) => {
     console.log("para",JSON.stringify(params))
     return axios.request({
-        url: '/application/curriculum/detail',
+        url: '/application/curriculum_detail',
         method: 'get',
         params
     })

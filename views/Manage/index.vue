@@ -320,7 +320,7 @@ export default{
             console.log("before",JSON.parse(JSON.stringify(row)))
             const to = this.$router.resolve({
                 name: 'curriculumDetail',
-                query: { apply_id: row.apply_id }
+                query: { curriculum_id: row.curriculum_id }
             })
             window.open(to.href, '_blank')
         },

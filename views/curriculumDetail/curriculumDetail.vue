@@ -111,7 +111,7 @@ export default{
         pullData(){
           getCurriculumDetail(this.$route.query).then((res) => {
             this.curriculum = getData(res.data)
-            console.log("data",JSON.stringify(res))
+            console.log("data",this.$route.query)
             console.log("cat",CONST.categoryList)
             this.curriculum.category = CONST.categoryList[this.curriculum.category]
           })

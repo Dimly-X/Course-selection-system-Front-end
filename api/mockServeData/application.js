@@ -41,8 +41,17 @@ for (let i = 0; i < count; i++) {
         })
     )
 }
-
+import CONST from '@/assets/consts'
 export default {
+    dealApplication: config => {
+      return {
+          code: CONST.RESPONSE_CODE.ACCEPTED,
+          data:{
+              status: CONST.RESPONSE_STATUS.POSITIVE,
+              message: '操作成功'
+          }
+      }
+    },
     /**
      * 获取列表
      * 要带参数 name, page, limt; name可以不填, page,limit有默认值。

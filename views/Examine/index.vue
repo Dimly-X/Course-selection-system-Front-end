@@ -34,12 +34,12 @@
               <el-button
                   size="mini"
                   type="success"
-                  @click="applyApplication(scope.row)">通过
+                  @click="dealApplication(scope.row, POSITIVE)">通过
               </el-button>
               <el-button
                   size="mini"
                   type="danger"
-                  @click="refuseApplication(scope.row)">拒绝
+                  @click="dealApplication(scope.row, NEGATIVE)">拒绝
               </el-button>
             </template>
           </el-table-column>
@@ -62,13 +62,15 @@
 
 <script>
 
-import { getApplication } from '../../api/data'
+import { getApplication, responseToApplication } from '../../api/data'
 import CurriculumDetail from '../curriculumDetail/curriculumDetail.vue'
-
+import CONST from '@/assets/consts'
 export default{
     name:'Examine',
     data(){
         return{
+            POSITIVE: CONST.RESPONSE_STATUS.POSITIVE,
+            NEGATIVE: CONST.RESPONSE_STATUS.NEGATIVE,
             tableData:[],
             tableLabel:[
                 {
@@ -110,7 +112,7 @@ export default{
                 console.log(res,'res')
                 //回调函数，res是接口的响应值
                 this.tableData = res.list.map(item => {
-                    let categoryList = ['专业必修','专业任意选修','学科基础课','分布式课程','体育类','思政类','英语类'];
+                    const categoryList = CONST.categoryList;
                     item.category_label = categoryList[item.category];
                     return item
                 })
@@ -118,46 +120,29 @@ export default{
                 this.config.loading = false
             })
         },
-        lookApplication(row){
-            console.log("before",row)
-            this.$router.push({
-                name: 'curriculumDetail',
-                query: { curriculum: JSON.parse(JSON.stringify(row)) }
-            })
-        },
-        applyApplication(row){
-            this.$confirm("确定接受该课程申请？","提示",{
+      lookApplication(row){
+        console.log("before",JSON.parse(JSON.stringify(row)))
+        const to = this.$router.resolve({
+          name: 'curriculumDetail',
+          query: { curriculum_id: row.curriculum_id }
+        })
+        window.open(to.href, '_blank')
+      },
+        dealApplication(row, op){
+            this.$prompt("确定接受该课程申请","提示",{
                 confirmButtonText:"确认",
                 cancelButtonText:"取消",
+                inputValue: '无反馈',
                 type:"warning"
-            }).then( () => {
-                const apply_id = row.apply_id
-                this.$http.post("/application/del",{
-                    params: { apply_id }
-                }).then(() =>{
-                    this.$message({
-                        type: 'success',
-                        message: '通过成功'
-                    })
-                    this.getList()
-                })
-            })
-        },
-        refuseApplication(row){
-            this.$confirm("确定拒绝该课程申请？","提示",{
-                confirmButtonText:"确认",
-                cancelButtonText:"取消",
-                type:"warning"
-            }).then( () => {
-                const apply_id = row.apply_id
-                this.$http.post("/application/del",{
-                    params: { apply_id }
-                }).then(() =>{
-                    this.$message({
-                        type: 'success',
-                        message: '拒绝成功'
-                    })
-                    this.getList()
+            }).then( (feedback) => {
+                const para = {
+                  apply_id: row.apply_id,
+                  operation: op,
+                  feedback: feedback
+                }
+                responseToApplication(para).then(() =>{
+                  this.$message.success('操作已提交')
+                  this.getList()
                 })
             })
         },

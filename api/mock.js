@@ -10,7 +10,7 @@ Mock.mock('/home', homeApi.getStatisticalData)
 Mock.mock(/application\/add/, 'post', applicationApi.createApplication)
 Mock.mock(/application\/edit/, 'post', applicationApi.updateApplication)
 Mock.mock(/application\/getApplication/, 'get', applicationApi.getApplicationList)
-
+Mock.mock(/application\/deal/, 'post', applicationApi.dealApplication)
 
 
 
@@ -18,7 +18,7 @@ Mock.mock(/application\/getApplication/, 'get', applicationApi.getApplicationLis
 Mock.mock(/application\/del/, 'post', applicationApi.deleteApplication)
 Mock.mock(/permission\/getMenu/, 'post', permissionApi.getMenu)
 
-Mock.mock(RegExp('/application/curriculum/detail*'), 'get', curriculumDetailApi.getStatisticalData)
+Mock.mock(RegExp('/application/curriculum_detail*'), 'get', curriculumDetailApi.getStatisticalData)
 
 
 
