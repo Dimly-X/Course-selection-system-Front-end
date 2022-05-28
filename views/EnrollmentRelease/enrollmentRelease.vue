@@ -6,12 +6,12 @@
         >
         <!-- 通过ref拿到当前组件的实例 -->
             <el-form ref="form" label-width="100px" :model="operateForm" :inline="inline">
-                 <el-form-item label="选课名称" prop="select_name">
-                    <el-input v-model="operateForm[select_name]"></el-input>
+                 <el-form-item label="选课名称" prop="enrollment_name">
+                    <el-input v-model="operateForm.enrollment_name"></el-input>
                 </el-form-item>
-                <el-form-item label="选课时间" prop="select_name">
+                <el-form-item label="选课时间" prop="enrollment_time">
                     <el-date-picker
-                        v-model="operateForm[select_time]"
+                        v-model="operateForm.enrollment_time"
                         type="datetimerange"
                         range-separator="至"
                         start-placeholder="开始时间"
@@ -100,13 +100,13 @@ export default{
             //双向绑定↓
             operateForm: {
                 enrollment_name: '',
-                enrollment_time: '',
+                enrollment_time: []
             },
             tableData:[],
             tableLabel:[
                 {
                     prop:"enrollment_name",
-                    label:"课程名称",
+                    label:"选课名称",
                     width: 300
                 },
                 {
@@ -139,7 +139,7 @@ export default{
                 })
             } else {
                 this.$http.post('/enrollment/add', this.operateForm).then(res => {
-                    console.log(this.operateForm)
+                    console.log("add",this.operateForm)
                     console.log(res)
                     this.isShow= false
                     this.getList()
@@ -150,19 +150,29 @@ export default{
             this.isShow = true
             this.operateType = 'add'
             this.operateForm = {
-                curriculum_name: '',
-                department: '',
-                category: '',
-                credit: '',
-                teacher: '',
-                semester:'',
-                upper_limit:'',
-                requirement: '',
-                introduction: '',
-                remark: ''
+                enrollment_name: '',
+                enrollment_time: '',
             }
         },
-
+        dateFormat(fmt, date) {
+            let ret;
+            const opt = {
+                "Y+": date.getFullYear().toString(),        // 年
+                "m+": (date.getMonth() + 1).toString(),     // 月
+                "d+": date.getDate().toString(),            // 日
+                "H+": date.getHours().toString(),           // 时
+                "M+": date.getMinutes().toString(),         // 分
+                "S+": date.getSeconds().toString()          // 秒
+                // 有其他格式化字符需求可以继续添加，必须转化成字符串
+            };
+            for (let k in opt) {
+                ret = new RegExp("(" + k + ")").exec(fmt);
+                if (ret) {
+                    fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+                };
+            };
+            return fmt;
+        },
         getList(curriculum_name = ''){
             console.log("aaa","aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             this.config.loading =true
@@ -174,24 +184,26 @@ export default{
                 console.log(res,'res')
                 //回调函数，res是接口的响应值
                 this.tableData = res.list.map(item => {
-                  //  item.sexLabel = item.sex === 0 ? "女" : "男"
-                    let departmentList = ['软件工程学院','法学院','马克思主义学院','经济学院','社会发展学院','外语学院','国际汉语文化学院','心理与认知科学学院'];
-                    let categoryList = ['专业必修','专业任意选修','学科基础课','分布式课程','体育类','思政类','英语类'];
-                    let statusList = ['待处理','通过','拒绝'];
-                   // item.department = departmentList[item.department];
-                    item.category_label = categoryList[item.category];
-                    item.apply_state_label = statusList[item.apply_state];
+                    if(item.enrollment_time[0]){
+                        var date = new Date(item.enrollment_time[0]);
+                        item.start_time = this.dateFormat("YYYY-mm-dd HH:MM:SS", date);
+                    }
+                    if(item.enrollment_time[1]){
+                        date = new Date(item.enrollment_time[1]);
+                        item.end_time = this.dateFormat("YYYY-mm-dd HH:MM:SS", date);
+                    }
                     return item
                 })
                 this.config.total = res.count
                 this.config.loading = false
-
             })
         },
         editEnrollment(row){
             this.isShow = true
             this.operateType = 'edit'
             this.operateForm = JSON.parse(JSON.stringify(row));//不能直接=row，因为这是vue 的双向数据绑定的弊端，实时更新数据，因为是一个数据源，因为在修改对象的时候，对象的指针直接指向页面数据了
+            console.log("aaaaaaedit",JSON.parse(JSON.stringify(row)));
+            console.log("aaaaaaedit", row.start_time);
         },
         delEnrollment(row){
             this.$confirm("此操作将永久删除该申请，是否继续？","提示",{
@@ -199,9 +211,9 @@ export default{
                 cancelButtonText:"取消",
                 type:"warning"
             }).then( () => {
-                const apply_id = row.apply_id
+                const enrollment_id = row.enrollment_id
                 this.$http.post("/enrollment/del",{
-                    params: { apply_id }
+                    params: { enrollment_id }
                 }).then(() =>{
                     this.$message({
                         type: 'success',

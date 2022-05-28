@@ -77,6 +77,7 @@ export default {
       //then就是说，调用接口之后会得到回应,res是接口的返回
       //{ data:res }这里是es6的语法，是把data先从res里面解构出来，让它（之前的res.data）作为res
       getMenu(this.form).then(({data: res}) => {
+        console.log("form",this.form)
         if (res.code === 20000) {
           this.$store.commit('clearMenu')
           this.$store.commit('setMenu', res.data.menu)
