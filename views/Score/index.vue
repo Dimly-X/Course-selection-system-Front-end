@@ -2,7 +2,7 @@
   <div class="outer">
     <div>
       <br>请选择学年与学期：
-      <el-select v-model="value1" placeholder="请选择">
+      <el-select v-model="search_year" placeholder="请选择" @change="changeSemester">
         <el-option
             v-for="item in years"
             :key="item.value"
@@ -10,7 +10,7 @@
             :value="item.value">
         </el-option>
       </el-select>
-      <el-select v-model="value2" placeholder="请选择" style="margin-left: 20px;">
+      <el-select v-model="search_semester" placeholder="请选择" style="margin-left: 20px;" @change="changeSemester">
         <el-option
             v-for="it in semesters"
             :key="it.value"
@@ -58,223 +58,65 @@ div.sticky {
 
 
 <script>
+import { getScore } from '../../api/data'
+import {getData} from '../../api/data'
+import CONST from '@/assets/consts'
+
 export default {
   data() {
     return {
       years: [{
-        value: '选项1',
+        value: '2018-2019',
         label: '2018-2019'
       }, {
-        value: '选项2',
+        value: '2019-2020',
         label: '2019-2020'
       }, {
-        value: '选项3',
+        value: '2020-2021',
         label: '2020-2021'
       }, {
-        value: '选项4',
+        value: '2021-2022',
         label: '2021-2022'
       }, {
-        value: '选项5',
+        value: '2022-2023',
         label: '2022-2023'
       }],
 
-      value1: '',
+      search_year: '',
 
-      value2: '',
+      search_semester: '',
 
       semesters: [{
-        value: '学期1',
+        value: '1',
         label: '第一学期'
       }, {
-        value: '学期2',
+        value: '2',
         label: '第二学期'
       }, {
-        value: '学期3',
+        value: '3',
         label: '暑期学期'
       }],
 
-      tableData: [{
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }, {
-        date: '2019-2020 1',
-        name: '体育赛事英语',
-        classification: '英语类',
-        point: '2.0',
-        usual: 100,
-        final: 100,
-        total: 100,
-        grade: 'A',
-        GP: '4.0'
-      }
-
-      ],
+      tableData: [],
       tableLabel: [
         {
           text: '学年学期',
-          id: 'date',
+          id: 'semester',
           width: 120
         },
         {
           text: '课程名称',
-          id: 'name',
+          id: 'curriculum_name',
           width: 300
         },
         {
           text: '课程类别',
-          id: 'classification',
+          id: 'category_label',
           width: 150
         },
         {
           text: '学分',
-          id: 'point',
+          id: 'credit',
           width: 80
         },
         {
@@ -305,6 +147,29 @@ export default {
       ]
 
     }
+  },
+  methods:{
+    getList(){
+            // curriculum_name ? (this.config.page = 1) : '' //搜索
+            getScore({
+              search_year: this.search_year,
+              search_semester: this.search_semester,
+            }).then(( res ) => {
+                console.log('result',res)
+                const data = getData(res.data);
+                console.log('dataaa',data)
+                this.tableData = data.list.map(item => {
+                    item.category_label = CONST.categoryList[item.category];
+                    return item
+                })
+            })
+    },
+    changeSemester(){
+      this.getList()
+    },
+  },
+  created(){
+    this.getList()
   }
 }
 </script>
