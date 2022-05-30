@@ -6,6 +6,7 @@ import router from "../router";
 /**
  * Appliaction
  */
+axios.baseUrl
 export const responseToApplication = (para) => {
     return axios.request({
         url: '/application/deal',
