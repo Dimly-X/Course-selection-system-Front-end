@@ -20,8 +20,19 @@ let departmentList = ['软件工程学院', '法学院', '马克思主义学院'
 let categoryList = ['专业必修', '专业任意选修', '学科基础课', '分布式课程', '体育类', '思政类', '英语类'];
 let statusList = ['待处理', '通', '拒绝'];
 let List = []
+let ApplicationList = []
 const count = 200
-
+for (let i = 0; i < count; i++) {
+    ApplicationList.push(
+        Mock.mock({
+            apply_id: Mock.Random.guid(),
+            curriculum_name: Mock.Random.cword(4, 8),
+            category: Mock.Random.integer(0, 6),
+            teacher: Mock.Random.cname(),
+            apply_time: Mock.Random.date(),
+        })
+    )
+}
 for (let i = 0; i < count; i++) {
     List.push(
         Mock.mock({
@@ -42,13 +53,14 @@ for (let i = 0; i < count; i++) {
     )
 }
 import CONST from '@/assets/consts'
+import App from "@/App";
 export default {
     dealApplication: config => {
       return {
           code: CONST.RESPONSE_CODE.ACCEPTED,
           data:{
-              status: CONST.RESPONSE_STATUS.POSITIVE,
-              message: '操作成功'
+              status: CONST.RESPONSE_STATUS.NEGATIVE,
+              message: JSON.stringify(config.body)
           }
       }
     },
@@ -60,17 +72,33 @@ export default {
      */
     getApplicationList: config => {
         console.log("get",JSON.stringify(config))
-        const { curriculum_name, page = 1, limit = 10 } = param2Obj(config.url)
-        console.log('name:' + curriculum_name, 'page:' + page, '分页大小limit:' + limit)
+        const { page = 1, entry_per_page = 10 } = param2Obj(config.url)
+        console.log( 'page:' + page, '分页大小limit:' + entry_per_page)
+        const mockList = ApplicationList
+        const pageList = mockList.filter((item, index) => index < entry_per_page * page && index >= entry_per_page * (page - 1))
+        return {
+            code: CONST.RESPONSE_CODE.ACCEPTED,
+            data: {
+                count: mockList.length,
+                list: pageList
+            }
+        }
+    },
+    getCurricuList: config => {
+        console.log("get",JSON.stringify(config))
+        const { search_key = '', page = 1, entry_per_page = 10 } = param2Obj(config.url)
+        console.log('name:' + search_key, 'page:' + page, '分页大小limit:' + entry_per_page)
         const mockList = List.filter(application => {
-            if (curriculum_name && application.curriculum_name.indexOf(curriculum_name) === -1 && application.teacher.indexOf(curriculum_name) === -1 && categoryList[application.category].indexOf(curriculum_name) === -1) return false
+            if (search_key && application.curriculum_name.indexOf(search_key) === -1 && application.teacher.indexOf(search_key) === -1 && categoryList[application.category].indexOf(search_key) === -1) return false
             return true
         })
-        const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+        const pageList = mockList.filter((item, index) => index < entry_per_page * page && index >= entry_per_page * (page - 1))
         return {
-            code: 20000,
-            count: mockList.length,
-            list: pageList
+            code: CONST.RESPONSE_CODE.ACCEPTED,
+            data: {
+                count: mockList.length,
+                list: pageList
+            }
         }
     },
     /**

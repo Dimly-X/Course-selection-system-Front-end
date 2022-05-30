@@ -2,7 +2,7 @@
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-//import Home from '../views/Home.vue'
+//import Any_Home from '../views/Any_Home.vue'
 
 //全局引入
 Vue.use(VueRouter)
@@ -11,49 +11,49 @@ const routes = [{
         path: '/',
         name: 'Main',
         component: () =>
-            import ('../views/Main.vue'), //其他界面继承Main的侧边栏布局
+            import ('../views/Anyone/Main.vue'), //其他界面继承Main的侧边栏布局
         children: [
             // {
             //     path: '/home',
             //     name: 'home',
             //     component: () =>
-            //         import ('../views/Home')
+            //         import ('../views/Any_Home')
             // },
             // {
             //     path: '/application',
             //     name: 'application',
             //     component: () =>
-            //         import ('../views/Application')
+            //         import ('../views/Teacher_Application')
             // },
             // {
             //     path: '/release',
             //     name: 'release',
             //     component: () =>
-            //         import ('../views/Release')
+            //         import ('../views/Teacher_Release')
             // },
             // {
             //     path: '/manage',
             //     name: 'manage',
             //     component: () =>
-            //         import ('../views/Manage')
+            //         import ('../views/Admin_Manage')
             // },
             // {
             //     path: '/examine',
             //     name: 'examine',
             //     component: () =>
-            //         import ('../views/Examine')
+            //         import ('../views/Admin_Examine')
             // },
             // {
             //     path: '/score',
             //     name: 'score',
             //     component: () =>
-            //         import ('../views/Score')
+            //         import ('../views/Student_Score')
             // },
             // {
             //     path: '/select',
             //     name: 'select',
             //     component: () =>
-            //         import ('../views/Select')
+            //         import ('../views/Student_Select')
             // }
         ]
     },
@@ -61,13 +61,13 @@ const routes = [{
         path: '/login',
         name: 'login',
         component: () =>
-            import ('../views/Login/login.vue')
+            import ('../views/Public/login.vue')
     },
     {
-        path: '/curriculumDetail',
+        path: '/Anyone',
         name: 'curriculumDetail',
         component: () =>
-            import ('../views/curriculumDetail/curriculumDetail.vue')
+            import ('../views/Anyone/curriculumDetail.vue')
     }
 ]
 

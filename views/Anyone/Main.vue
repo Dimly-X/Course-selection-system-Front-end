@@ -16,7 +16,7 @@
 </template>
 <script>
 
-import CommonAside from '../src/components/CommonAside.vue'
+import CommonAside from '@/components/CommonAside.vue'
 import CommonHeader from '@/components/CommonHeader'
 export default{
     name:'Home',

@@ -41,49 +41,49 @@
         //         name:'home',
         //         label:'首页',
         //         icon:'s-home',
-        //         url:'Home/Home'
+        //         url:'Any_Home/Any_Home'
         //     },
         //     {
         //         path:'/appliaction',
         //         name:'application',
         //         label:'开课申请',
         //         icon:'notebook-1',
-        //         url:'Application/Application'
+        //         url:'Teacher_Application/Teacher_Application'
         //     },
         //     {
         //         path:'/release',
         //         name:'release',
         //         label:'成绩发布',
         //         icon:'document-checked',
-        //         url:'Release/Release'
+        //         url:'Teacher_Release/Teacher_Release'
         //     },
         //     {
         //         path:'/manage',
         //         name:'manage',
         //         label:'课程管理',
         //         icon:'notebook-2',
-        //         url:'Manage/Manage'
+        //         url:'Admin_Manage/Admin_Manage'
         //     },
         //     {
         //         path:'/examine',
         //         name:'examine',
         //         label:'新课程审核',
         //         icon:'edit',
-        //         url:'Examine/Examine'
+        //         url:'Admin_Examine/Admin_Examine'
         //     },
         //     {
         //         path:'/score',
         //         name:'score',
         //         label:'成绩',
         //         icon:'document-checked',
-        //         url:'Score/Score'
+        //         url:'Student_Score/Student_Score'
         //     },
         //     {
         //         path:'/select',
         //         name:'select',
         //         label:'选课',
         //         icon:'reading',
-        //         url:'Select/Select'
+        //         url:'Student_Select/Student_Select'
         //     }
         // ]
       };

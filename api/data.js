@@ -6,59 +6,81 @@ import router from "../router";
 /**
  * Appliaction
  */
+<<<<<<< HEAD
 axios.baseUrl
 export const responseToApplication = (para) => {
+=======
+//over
+export const responseToApplication = (params) => {
+>>>>>>> 1950bd19b6e068c0c1f67cc33a5c1678e5d28080
     return axios.request({
-        url: '/application/deal',
+        url: '/admin/application/deal',
         method: 'post',
-        para
+        data: params
     })
 }
+//over
 export const getApplication = (params) => {
     return axios.request({
-        url: '/application/getApplication',
+        url: '/admin/application/list',
         method: 'get',
         params
     })
 }
-
-
-export const getCurriculumDetail = (params) => {
-    console.log("para", JSON.stringify(params))
+//
+export const getAllCurriculum = (params) => {
     return axios.request({
-        url: '/application/curriculum_detail',
+        url: '/admin/curriculum/list',
         method: 'get',
         params
     })
 }
 
+
+
+//over
+export const getCurriculumDetail = (params) => {
+    if(params.curriculum_id) {
+        return axios.request({
+            url: '/admin/curriculum/detail',
+            method: 'get',
+            params
+        })
+    }else if(params.apply_id){
+        return axios.request({
+            url: '/admin/application/detail',
+            method: 'get',
+            params
+        })
+    }
+}
 /**
  * Curriculum
  */
 export const getCurriculum = (params) => {
     return axios.request({
-        url: '/curriculum/getCurriculum',
+        url: '/admin/curriculum/list',
         method: 'get',
         params
     })
 }
 export const delCurriculum = (params) => {
     return axios.request({
-        url: '/curriculum/del',
+        url: '/admin/curriculum/del',
         method: 'post',
         data: params
     })
 }
 export const editCurriculum = (params) => {
     return axios.request({
-        url: '/curriculum/edit',
+        url: '/admin/curriculum/edit',
         method: 'post',
         data: params
     })
 }
 export const createCurriculum = (params) => {
     return axios.request({
-        url: '/curriculum/add',
+        url: '/admin/curriculum/create',
         method: 'post',
         data: params
     })
@@ -68,16 +90,16 @@ export const createCurriculum = (params) => {
 /**
  * Menu
  */
-export const getMenu = (param) => {
+export const tryLogin = (param) => {
     return axios.request({
-        url: '/permission/getMenu',
+        url: '/login',
         method: 'post',
         data: param
     })
 }
 
 /**
- * Home
+ * Any_Home
  */
 export const getHomeData = () => {
     return axios.request({
@@ -91,14 +113,14 @@ export const getHomeData = () => {
  */
 export const getEnrollment = (params) => {
     return axios.request({
-        url: '/enrollment/getEnrollment',
+        url: '/admin/enrollment/list',
         method: 'get',
         params
     })
 }
 
 /**
- * Score
+ * Student_Score
  */
 export const getScore = (params) => {
     console.log("data.js", params)

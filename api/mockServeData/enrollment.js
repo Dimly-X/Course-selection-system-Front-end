@@ -24,6 +24,7 @@ List.push(
         enrollment_id: Mock.Random.guid(),
         enrollment_name: "第一轮选课",
         enrollment_time: ["2022-05-03T16:00:00.000Z", "2022-06-28T16:00:00.000Z"],
+        enrollment_type: 0
     })
 )
 List.push(
@@ -31,6 +32,7 @@ List.push(
         enrollment_id: Mock.Random.guid(),
         enrollment_name: "第二轮选课",
         enrollment_time: ["2022-05-03T16:00:00.000Z", "2022-06-28T16:00:00.000Z"],
+        enrollment_type: 1
     })
 )
 List.push(
@@ -38,10 +40,11 @@ List.push(
         enrollment_id: Mock.Random.guid(),
         enrollment_name: "第三轮选课",
         enrollment_time: ["2022-05-03T16:00:00.000Z", "2022-06-28T16:00:00.000Z"],
+        enrollment_type: 1
     })
 )
 
-
+import CONST from '@/assets/consts'
 export default {
     /**
      * 获取列表
@@ -55,9 +58,11 @@ export default {
         const mockList = List
         const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
         return {
-            code: 20000,
-            count: mockList.length,
-            list: pageList
+            code: CONST.RESPONSE_CODE.ACCEPTED,
+            data: {
+                count: mockList.length,
+                list: pageList
+            }
         }
     },
     /**
