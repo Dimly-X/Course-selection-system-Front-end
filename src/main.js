@@ -1,7 +1,7 @@
 //整个项目的入口文件
 import Vue from 'vue'
 import App from './App.vue'
-import { Button, Radio, Container, Main, Aside, Header, Menu, Submenu, MenuItem, MenuItemGroup, Icon, Dropdown, DropdownItem, DropdownMenu, Row, Col, Card, Table, TableColumn, Input, Link, Select, Option, Form, FormItem, Switch, DatePicker, Dialog, Pagination, MessageBox, Message, Descriptions, DescriptionsItem } from 'element-ui';
+import { Button, Radio, Container, Main, Aside, Header, Menu, Submenu, MenuItem, MenuItemGroup, Icon, Dropdown, DropdownItem, DropdownMenu, Row, Col, Card, Table, TableColumn, Input, InputNumber, Link, Select, Option, Form, FormItem, Switch, DatePicker, Dialog, Pagination, MessageBox, Message, Descriptions, DescriptionsItem } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/less/index.less'
 
@@ -32,6 +32,7 @@ Vue.use(Card)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Input)
+Vue.use(InputNumber)
 Vue.use(Link)
 Vue.use(Select)
 Vue.use(Option)

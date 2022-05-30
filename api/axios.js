@@ -2,11 +2,11 @@ import axios from "axios";
 import config from "../config";
 
 //拿到请求的接口地址（并不明白
-const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
-
+const baseUrl = 'https://api.virapi.com/vir_github1d2e1gfa4ba78/course'//process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
 class HttpRequest {
-    constructor(baseurL) {
-        this.baseUrl = baseUrl
+
+    constructor(url) {
+        this.baseUrl = url
     }
     getInsideConfig() {
             const config = {
@@ -20,6 +20,8 @@ class HttpRequest {
         // 添加请求拦截器
         instance.interceptors.request.use(function(config) {
             // 在发送请求之前做些什么
+            config.headers['app-token'] = '$2a$10$lBIab5K2jhEEiU21jE06b.r56UQMv2I80z8ecoPILM.HVzE0cc50m'
+            config.baseURL = baseUrl
             return config;
         }, function(error) {
             // 对请求错误做些什么

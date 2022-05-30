@@ -55,6 +55,6 @@ export default{
 <style>
 .user_card{
   shadow: hover;
-  width: fit-content;
+  width: 300px;
 }
 </style>

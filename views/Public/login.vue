@@ -49,8 +49,9 @@
 <script>
 
 import Mock from 'mockjs'
-import {getMenu} from '../../api/data'
+import { tryLogin} from '../../api/data'
 import {getData} from '../../api/data'
+import CONST from '@/assets/consts'
 export default {
   name: 'Login',
   data() {
@@ -76,12 +77,13 @@ export default {
     login() {
       //then就是说，调用接口之后会得到回应,res是接口的返回
       //{ data:res }这里是es6的语法，是把data先从res里面解构出来，让它（之前的res.data）作为res
-      getMenu(this.form).then((res) => {
+      tryLogin(this.form).then((res) => {
         const data = getData(res.data);
         console.log("res",JSON.stringify(data))
-        if (data.status === true) {
+        if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
+          console.log("in",data.user_role)
           this.$store.commit('clearMenu')
-          this.$store.commit('setMenu', data.menu)
+          this.$store.commit('setMenu', CONST.menuList[data.user_role])
           this.$store.commit('setToken', data.token)
           this.$store.commit('addMenu', this.$router)
           this.$router.push({name: 'Main'})

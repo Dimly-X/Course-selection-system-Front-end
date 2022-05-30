@@ -62,8 +62,8 @@
 
 <script>
 
-import { getApplication, responseToApplication } from '../../api/data'
-import CurriculumDetail from '../curriculumDetail/curriculumDetail.vue'
+import {getApplication, getData, responseToApplication} from '../../api/data'
+import CurriculumDetail from '../Anyone/curriculumDetail.vue'
 import CONST from '@/assets/consts'
 export default{
     name:'Examine',
@@ -96,7 +96,8 @@ export default{
                ],
             config: {
                 total: 30,
-                page: 1
+                page: 1,
+                entry_per_page: 10
             }
         }
     },
@@ -106,16 +107,17 @@ export default{
             curriculum_name ? (this.config.page = 1) : '' //搜索
             getApplication({
                 page: this.config.page,
-                curriculum_name
-            }).then(({ data:res }) => {
-                console.log(res,'res')
+                entry_per_page: this.config.entry_per_page
+            }).then( (res) => {
+                const data = getData(res.data)
+                console.log('data',JSON.stringify(data))
                 //回调函数，res是接口的响应值
-                this.tableData = res.list.map(item => {
+                this.tableData = data.list.map(item => {
                     const categoryList = CONST.categoryList;
                     item.category_label = categoryList[item.category];
                     return item
                 })
-                this.config.total = res.count
+                this.config.total = data.count
                 this.config.loading = false
             })
         },
@@ -123,12 +125,12 @@ export default{
         console.log("before",JSON.parse(JSON.stringify(row)))
         const to = this.$router.resolve({
           name: 'curriculumDetail',
-          query: { curriculum_id: row.curriculum_id }
+          query: { apply_id: row.apply_id }
         })
         window.open(to.href, '_blank')
       },
         dealApplication(row, op){
-            this.$prompt("确定接受该课程申请","提示",{
+            this.$prompt("确定" + (op?"接受":"拒绝") + "该课程申请","提示",{
                 confirmButtonText:"确认",
                 cancelButtonText:"取消",
                 inputValue: '无反馈',
@@ -137,10 +139,14 @@ export default{
                 const para = {
                   apply_id: row.apply_id,
                   operation: op,
-                  feedback: feedback
+                  feedback: feedback.value
                 }
-                responseToApplication(para).then(() =>{
-                  this.$message.success('操作已提交')
+                responseToApplication(para).then((res) =>{
+                  const data = getData(res.data)
+                  this.$message({
+                        message: data.message,
+                        type: data.status?'success':'warning'
+                      })
                   this.getList()
                 })
             })
