@@ -78,7 +78,7 @@ export default {
             model: 'department',
             label: '开设院系',
             type: 'multiSelect',
-            opts: this.methods.transDept()
+            opts: this.transDept()
           },
           {
             model: 'category',
@@ -165,11 +165,7 @@ export default {
             type: 'textInput'
           }
         ]
-
-
-      }
-
-      ,
+      },
       //双向绑定↓
       operateForm: {
         curriculum_name: '',
@@ -236,7 +232,7 @@ export default {
           value: i
         })
       }
-      return list
+      // return list
     },
     confirm() {
       if (this.operateType === 'edit') {

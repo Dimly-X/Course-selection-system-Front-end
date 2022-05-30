@@ -6,28 +6,23 @@ import router from "../router";
 /**
  * Appliaction
  */
-<<<<<<< HEAD
-axios.baseUrl
-export const responseToApplication = (para) => {
-=======
 //over
 export const responseToApplication = (params) => {
->>>>>>> 1950bd19b6e068c0c1f67cc33a5c1678e5d28080
-    return axios.request({
-        url: '/admin/application/deal',
-        method: 'post',
-        data: params
-    })
-}
-//over
+        return axios.request({
+            url: '/admin/application/deal',
+            method: 'post',
+            data: params
+        })
+    }
+    //over
 export const getApplication = (params) => {
-    return axios.request({
-        url: '/admin/application/list',
-        method: 'get',
-        params
-    })
-}
-//
+        return axios.request({
+            url: '/admin/application/list',
+            method: 'get',
+            params
+        })
+    }
+    //
 export const getAllCurriculum = (params) => {
     return axios.request({
         url: '/admin/curriculum/list',
@@ -40,23 +35,23 @@ export const getAllCurriculum = (params) => {
 
 //over
 export const getCurriculumDetail = (params) => {
-    if(params.curriculum_id) {
-        return axios.request({
-            url: '/admin/curriculum/detail',
-            method: 'get',
-            params
-        })
-    }else if(params.apply_id){
-        return axios.request({
-            url: '/admin/application/detail',
-            method: 'get',
-            params
-        })
+        if (params.curriculum_id) {
+            return axios.request({
+                url: '/admin/curriculum/detail',
+                method: 'get',
+                params
+            })
+        } else if (params.apply_id) {
+            return axios.request({
+                url: '/admin/application/detail',
+                method: 'get',
+                params
+            })
+        }
     }
-}
-/**
- * Curriculum
- */
+    /**
+     * Curriculum
+     */
 export const getCurriculum = (params) => {
     return axios.request({
         url: '/admin/curriculum/list',
@@ -136,14 +131,14 @@ export const getScore = (params) => {
  */
 export const getRelease = () => {
     return axios.request({
-        url: 'http://localhost:8080/register/getRelease',
+        url: 'http://localhost:8081/register/getRelease',
         method: 'get',
     })
 }
 
 export const getStudentList = (params) => {
     return axios.request({
-        url: 'http://localhost:8080/register/getStudentList',
+        url: 'http://localhost:8081/register/getStudentList',
         method: 'get',
         params
     })
