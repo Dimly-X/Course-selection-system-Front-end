@@ -138,7 +138,7 @@ export const deleteEnrollment = (params) => {
  */
 export const getScore = (params) => {
     return axios.request({
-        url: '/score/getScore',
+        url: '/student/score',
         method: 'get',
         params
     })
@@ -150,7 +150,7 @@ export const getScore = (params) => {
 export const getRelease = () => {
     return axios.request({
         url: 'http://localhost:8081/register/getRelease',
-        method: 'get',
+        method: 'get'
     })
 }
 
@@ -161,7 +161,12 @@ export const getStudentList = (params) => {
         params
     })
 }
-
+export const getMyCurriculumTable = () => {
+    return axios.request({
+        url: '/student/table',
+        method: 'get'
+    })
+}
 export const getData = (datapackage) => {
     if (datapackage.code === CONST.RESPONSE_CODE.ACCEPTED) {
         return datapackage.data

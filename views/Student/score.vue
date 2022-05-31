@@ -66,19 +66,16 @@ export default {
   data() {
     return {
       years: [{
-        value: '2018-2019',
-        label: '2018-2019'
-      }, {
-        value: '2019-2020',
+        value: 2019,
         label: '2019-2020'
       }, {
-        value: '2020-2021',
+        value: 2020,
         label: '2020-2021'
       }, {
-        value: '2021-2022',
+        value: 2021,
         label: '2021-2022'
       }, {
-        value: '2022-2023',
+        value: 2022,
         label: '2022-2023'
       }],
 
@@ -100,19 +97,14 @@ export default {
       tableData: [],
       tableLabel: [
         {
-          text: '学年学期',
-          id: 'semester',
-          width: 120
-        },
-        {
           text: '课程名称',
-          id: 'curriculum_name',
-          width: 300
+          id: 'name',
+          width: 350
         },
         {
           text: '课程类别',
-          id: 'category_label',
-          width: 150
+          id: 'category',
+          width: 160
         },
         {
           text: '学分',
@@ -122,27 +114,22 @@ export default {
         {
           text: '平时成绩',
           id: 'usual',
-          width: 80
+          width: 100
         },
         {
           text: '期末成绩',
           id: 'final',
-          width: 80
+          width: 100
         },
         {
           text: '总评成绩',
           id: 'total',
-          width: 80
-        },
-        {
-          text: '等级',
-          id: 'grade',
-          width: 50
+          width: 100
         },
         {
           text: '绩点',
           id: 'GP',
-          width: 50
+          width: 100
         }
       ]
 
@@ -150,26 +137,28 @@ export default {
   },
   methods:{
     getList(){
-            // curriculum_name ? (this.config.page = 1) : '' //搜索
             getScore({
-              search_year: this.search_year,
-              search_semester: this.search_semester,
+              year: this.search_year,
+              semester: this.search_semester,
             }).then(( res ) => {
                 console.log('result',res)
                 const data = getData(res.data);
                 console.log('dataaa',data)
-                this.tableData = data.list.map(item => {
-                    item.category_label = CONST.categoryList[item.category];
+                this.tableData = data.map(item => {
+                    item.category = CONST.categoryList[item.category];
                     return item
                 })
             })
     },
     changeSemester(){
+      if(this.search_year === '' || this.search_semester === '' ){
+        return
+      }
       this.getList()
     },
   },
   created(){
-    this.getList()
+
   }
 }
 </script>

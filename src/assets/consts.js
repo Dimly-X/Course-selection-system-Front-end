@@ -27,6 +27,13 @@ export default {
             url: 'Anyone/home'
         },
             {
+                path: '/table',
+                name: 'table',
+                label: '我的课表',
+                icon: 'document-checked',
+                url: 'Student/table'
+            },
+            {
                 path: '/score',
                 name: 'score',
                 label: '我的成绩',
@@ -93,11 +100,12 @@ export default {
             }
         ]
     ],
-    categoryList: ['专业必修', '专业任意选修', '学科基础课', '分布式课程', '体育类', '思政类', '英语类'],
+    categoryList: ['专业必修', '专业任意选修', '学科基础', '分布式课程', '体育类', '思政类', '英语类'],
     departmentList: ['软件工程学院', '法学院', '马克思主义学院', '经济学院', '社会发展学院', '外语学院', '国际汉语文化学院', '心理与认知科学学院'],
     statusList: ['待处理', '通过', '拒绝'],
     roleList: ['学生', '教师', '教务'],
     dayList: ['周一','周二','周三','周四','周五','周六','周日'],
+    cnNumber: ['一', '二', '三', '四', '五', '六', '七', '八' ,'九' ,'十'],
     getTime(id){
         return ((id % 10) + 1) + ''
     },
