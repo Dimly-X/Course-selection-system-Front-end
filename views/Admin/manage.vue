@@ -280,7 +280,6 @@ export default {
         search_key: this.searchForm.keyword
       }).then((res) => {
         const data = getData(res.data);
-        console.log("data", JSON.stringify(data))
         this.tableData = data.list.map(item => {
           item.category_label = CONST.categoryList[item.category];
           return item
@@ -290,7 +289,6 @@ export default {
       })
     },
     lookCurriculum(row) {
-      console.log("before", JSON.parse(JSON.stringify(row)))
       const to = this.$router.resolve({
         name: 'curriculumDetail',
         query: {curriculum_id: row.curriculum_id}
@@ -331,7 +329,6 @@ export default {
   //（生命周期）创造的时候就要调用
   created() {
     this.getList()
-    console.log("nedata", JSON.stringify(Form.form))
   }
 }
 </script>

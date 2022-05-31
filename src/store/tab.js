@@ -12,7 +12,6 @@ export default {
         },
         setMenu(state, val) {
             state.menu = val
-            console.log("log",JSON.stringify(val))
             Cookie.set('menu', JSON.stringify(val))
         },
         clearMenu(state) {
@@ -23,7 +22,6 @@ export default {
             if (!Cookie.get('menu')) {
                 return
             }
-            console.log("val",Cookie.get('menu'))
             const menu = JSON.parse(Cookie.get('menu'))
             state.menu = menu
             const menuArray = []

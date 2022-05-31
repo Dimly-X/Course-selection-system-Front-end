@@ -33,7 +33,7 @@
               :width="item.width"
           >
             <template slot-scope="scope">
-              <span>{{ scope.row[item.prop] }}</span>
+              <span>{{ item.prop === 'type' ? (scope.row['type'] === 0 ? '志愿' : '秒杀') : scope.row[item.prop] }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -44,7 +44,7 @@
             <template slot-scope="scope">
               <el-button
                   size="mini"
-                  @click="editEnrollment(scope.row)">编辑
+                  @click="edittEnrollment(scope.row)">编辑
               </el-button>
               <el-button
                   size="mini"
@@ -62,7 +62,7 @@
             :total="config.total"
             :current-page.sync="config.page"
             @current-change="getList()"
-            page-size="10"
+            page-size:10
 
         >
         </el-pagination>
@@ -75,7 +75,14 @@
 
 import CommonForm from '@/components/CommonForm'
 import CommonTable from '@/components/CommonTable.vue'
-import {getApplication, getData} from '../../api/data'
+import {
+  createEnrollment,
+  createRelease,
+  deleteEnrollment,
+  editEnrollment,
+  getApplication,
+  getData
+} from '../../api/data'
 import {getEnrollment} from '../../api/data'
 import CurriculumDetail from '../Anyone/curriculumDetail.vue'
 import MyForm from "@/components/MyForm";
@@ -93,9 +100,9 @@ export default {
       isShow: false,
       //双向绑定↓
       formData: {
-        enrollment_type: '',
-        enrollment_name: '',
-        enrollment_time: []
+        type: '',
+        name: '',
+        time: []
       },
       form: [
         {
@@ -108,7 +115,7 @@ export default {
               item: {
                 type: 'input',
                 label: '名称',
-                model: 'enrollment_name'
+                model: 'name'
               }
             },
             {
@@ -116,7 +123,7 @@ export default {
               item: {
                 type: 'select',
                 label: '方式',
-                model: 'enrollment_type',
+                model: 'type',
                 opts: [
                   {
                     label: '志愿',
@@ -141,7 +148,7 @@ export default {
                 type: 'datePicker',
                 itype: 'datetimerange',
                 label: '时间',
-                model: 'enrollment_time',
+                model: 'time',
                 rangeSeparator: '至',
                 startPlaceholder: '开始时间',
                 endPlaceholder: '结束时间'
@@ -153,12 +160,12 @@ export default {
       tableData: [],
       tableLabel: [
         {
-          prop: "enrollment_name",
+          prop: "name",
           label: "选课名称",
           width: 200
         },
         {
-          prop: "enrollment_type",
+          prop: "type",
           label: "选课方式",
           width: 100
         },
@@ -183,28 +190,42 @@ export default {
     confirm() {
       // 要说明的是，这里不是调用了接口吗，真正的接口定义应该是在/api/data.js里
       // 但是因为我是用mock模拟的接口，所以这里暂时是在mock.js里面把接口拦住了（之前课程管理页也是用的这个方法）
-      if (this.operateType === 'edit') {
-        this.$http.post('/enrollment/edit', this.operateForm).then(res => {
-          console.log(this.operateForm)
-          console.log(res)
+      if (this.operateType === 'create') {
+        this.formData.time[0] = Number(this.formData.time[0])
+        this.formData.time[1] = Number(this.formData.time[1])
+        createEnrollment(this.formData).then(res => {
+          const data = getData(res.data)
+          this.$message({
+            message: data.message,
+            type: data.status ? 'success' : 'warning'
+          })
           this.isShow = false
           this.getList()
         })
       } else {
-        this.$http.post('/enrollment/add', this.operateForm).then(res => {
-          console.log("add", this.operateForm)
-          console.log(res)
+        editEnrollment(this.formData).then(res => {
+          const data = getData(res.data)
+          this.$message({
+            message: data.message,
+            type: data.status ? 'success' : 'warning'
+          })
           this.isShow = false
           this.getList()
         })
       }
+      this.formData = {
+        name: '',
+        time: '',
+        type: '',
+      }
     },
     newEnrollment() {
       this.isShow = true
-      this.operateType = 'add'
-      this.operateForm = {
-        enrollment_name: '',
-        enrollment_time: '',
+      this.operateType = 'create'
+      this.formData = {
+        name: '',
+        time: '',
+        type: ''
       }
     },
     dateFormat(fmt, date) {
@@ -223,47 +244,40 @@ export default {
         if (ret) {
           fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
         }
-        ;
+
       }
-      ;
+
       return fmt;
     },
-    getList(curriculum_name = '') {
-      console.log("aaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    getList() {
       this.config.loading = true
-      curriculum_name ? (this.config.page = 1) : '' //搜索
-      getEnrollment({
-        page: this.config.page,
-        curriculum_name
-      }).then((res) => {
+      getEnrollment({page: this.config.page}).then((res) => {
         const data = getData(res.data)
         //回调函数，res是接口的响应值
         this.tableData = data.list.map(item => {
-          if (item.enrollment_time[0]) {
-            var date = new Date(item.enrollment_time[0]);
+          if (item.time[0]) {
+            var date = new Date(item.time[0]);
             item.start_time = this.dateFormat("YYYY-mm-dd HH:MM:SS", date);
           }
-          if (item.enrollment_time[1]) {
-            date = new Date(item.enrollment_time[1]);
+          if (item.time[1]) {
+            date = new Date(item.time[1]);
             item.end_time = this.dateFormat("YYYY-mm-dd HH:MM:SS", date);
           }
-          if(item.enrollment_type === 0){
-            item.enrollment_type = '志愿'
-          }else{
-            item.enrollment_type = '秒杀'
-          }
+
           return item
         })
-        this.config.total = res.count
+        this.config.total = data.count
         this.config.loading = false
       })
     },
-    editEnrollment(row) {
+    edittEnrollment(row) {
+      this.formData = {
+        type: row.type,
+        time: row.time,
+        name: row.name
+      }
       this.isShow = true
       this.operateType = 'edit'
-      this.operateForm = JSON.parse(JSON.stringify(row));//不能直接=row，因为这是vue 的双向数据绑定的弊端，实时更新数据，因为是一个数据源，因为在修改对象的时候，对象的指针直接指向页面数据了
-      console.log("aaaaaaedit", JSON.parse(JSON.stringify(row)));
-      console.log("aaaaaaedit", row.start_time);
     },
     delEnrollment(row) {
       this.$confirm("此操作将永久删除该申请，是否继续？", "提示", {
@@ -271,16 +285,15 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        const enrollment_id = row.enrollment_id
-        this.$http.post("/enrollment/del", {
-          params: {enrollment_id}
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功'
-          })
-          this.getList()
-        })
+        deleteEnrollment({name: row.name}).then(
+            (res) => {
+              const data = getData(res.data)
+              this.$message({
+                message: data.message,
+                type: data.status ? 'success' : 'warning'
+              })
+            })
+        this.getList()
       })
     },
   },

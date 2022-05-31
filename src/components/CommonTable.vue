@@ -51,7 +51,7 @@
           :total="config.total"
           :current-page.sync="config.page"
           @current-change="changePage"
-          :page-size="10"
+          :page-size=10
 
       >
       </el-pagination>

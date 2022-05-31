@@ -120,7 +120,6 @@ export default {
       var timeStr = ''
       for (var i = 0; i < this.curriculum.time.length; i++) {
         const day = CONST.getDay(this.curriculum.time[i])
-        console.log('getday',this.curriculum.time[i])
         const time = CONST.getTime(this.curriculum.time[i])
         if (last !== day) {
           timeStr += day + ': '
@@ -128,7 +127,6 @@ export default {
         }
         timeStr += time + ', '
       }
-      console.log("time", timeStr)
       this.curriculum.time = timeStr
     },
     transDept() {
@@ -142,11 +140,8 @@ export default {
       this.curriculum.department = dept_str
     },
     pullData() {
-      console.log("detail", this.$route.query)
       getCurriculumDetail(this.$route.query).then((res) => {
         this.curriculum = getData(res.data)
-        console.log("data", JSON.stringify(this.curriculum))
-        console.log("cat", CONST.categoryList)
         this.curriculum.category = CONST.categoryList[this.curriculum.category]
         this.transDept()
         this.transTime()

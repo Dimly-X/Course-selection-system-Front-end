@@ -85,11 +85,11 @@ export default {
                 url: 'Admin/examine'
             },
             {
-                path: '/enrollmentRelease',
+                path: '/enrollment',
                 name: 'enrollmentRelease',
                 label: '选课时间发布',
                 icon: 'document-checked',
-                url: 'Admin/enrollmentRelease'
+                url: 'Admin/enrollment'
             }
         ]
     ],

@@ -79,9 +79,7 @@ export default {
       //{ data:res }这里是es6的语法，是把data先从res里面解构出来，让它（之前的res.data）作为res
       tryLogin(this.form).then((res) => {
         const data = getData(res.data);
-        console.log("res",JSON.stringify(data))
         if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
-          console.log("in",data.user_role)
           this.$store.commit('clearMenu')
           this.$store.commit('setMenu', CONST.menuList[data.user_role])
           this.$store.commit('setToken', data.token)

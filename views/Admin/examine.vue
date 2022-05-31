@@ -52,7 +52,7 @@
             :total="config.total"
             :current-page.sync="config.page"
             @current-change="getList()"
-            page-size="10"
+            page-size:10
 
         >
         </el-pagination>
@@ -110,7 +110,6 @@ export default{
                 entry_per_page: this.config.entry_per_page
             }).then( (res) => {
                 const data = getData(res.data)
-                console.log('data',JSON.stringify(data))
                 //回调函数，res是接口的响应值
                 this.tableData = data.list.map(item => {
                     const categoryList = CONST.categoryList;
@@ -122,7 +121,6 @@ export default{
             })
         },
       lookApplication(row){
-        console.log("before",JSON.parse(JSON.stringify(row)))
         const to = this.$router.resolve({
           name: 'curriculumDetail',
           query: { apply_id: row.apply_id }
