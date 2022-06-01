@@ -1,6 +1,7 @@
 <template>
   <div class="detail_outer">
     <el-descriptions class="margin-top"
+                     v-loading="config.loading"
                      title="课程信息"
                      :column="1"
                      :size="size" border
@@ -96,6 +97,9 @@ export default {
   name: 'CurriculumDetail',
   data() {
     return {
+      config:{
+        loading: false
+      },
       curriculum: {
         category: '',
         credit: '',
@@ -140,11 +144,13 @@ export default {
       this.curriculum.department = dept_str
     },
     pullData() {
+      this.config.loading = true
       getCurriculumDetail(this.$route.query).then((res) => {
         this.curriculum = getData(res.data)
         this.curriculum.category = CONST.categoryList[this.curriculum.category]
         this.transDept()
         this.transTime()
+        this.config.loading = false
       })
     }
   },

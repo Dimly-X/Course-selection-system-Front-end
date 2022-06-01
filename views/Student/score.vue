@@ -24,7 +24,8 @@
                 :header-cell-style="{background:'#FAFAFA',color:'#000000'}"
                 stripe
                 :data="tableData"
-                border>
+                border
+                v-loading="config.loading">
         <el-table-column
             v-for="item in tableLabel"
             :key="item.id"
@@ -65,6 +66,9 @@ import CONST from '@/assets/consts'
 export default {
   data() {
     return {
+      config:{
+        loading: false
+      },
       years: [{
         value: 2019,
         label: '2019-2020'
@@ -137,6 +141,7 @@ export default {
   },
   methods:{
     getList(){
+      this.config.loading = true
             getScore({
               year: this.search_year,
               semester: this.search_semester,
@@ -148,6 +153,7 @@ export default {
                     item.category = CONST.categoryList[item.category];
                     return item
                 })
+              this.config.loading = false
             })
     },
     changeSemester(){

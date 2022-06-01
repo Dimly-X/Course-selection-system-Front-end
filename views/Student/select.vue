@@ -22,7 +22,7 @@
         ref="emptyState"
         description="当前不在选课时间内">
     </el-empty>
-    <el-tabs v-if="notEmpty" type="border-card">
+    <el-tabs v-if="notEmpty" type="border-card"  style="width: fit-content" v-loading="config.loading">
       <el-tab-pane label="可选课程">
         <div class="optional_outer">
           <div class="optional_table">
@@ -43,7 +43,6 @@
                       :style="{width: item.sub_width, marginLeft:'15px'}"
                       v-model="searchKey"
                       size="mini"
-                      @change="updateShow"
                       placeholder="筛选"/>
                 </template>
                 <template slot-scope="scope">
@@ -81,7 +80,7 @@
                 layout="prev, pager, next"
                 :total="optional_config.total"
                 :current-page.sync="optional_config.page"
-                @current-change="getOptionalList"
+                @current-change="updateShow"
                 :page-size=10
             >
             </el-pagination>
@@ -143,16 +142,6 @@
             </el-table>
             <!-- @current-change是改变页数的时候的回调函数 -->
           </div>
-          <div class="selected_pager">
-            <el-pagination
-                layout="prev, pager, next"
-                :total="selected_config.total"
-                :current-page.sync="selected_config.page"
-                @current-change="getSelected"
-                :page-size=10
-            >
-            </el-pagination>
-          </div>
         </div>
       </el-tab-pane>
 
@@ -171,12 +160,16 @@ export default {
   },
   data() {
     return {
+      config:{
+        loading: false
+      },
       cnDay: CONST.dayList,
       cnNum: CONST.cnNumber,
       //7行10列。tableData[星期][第几节]
       isEmpty: 'none',
       notEmpty: true,
       tableDataShow: [],
+      tableDataCached: [],
       tableDataAll: [],
       tableLabelAll: [
         {
@@ -264,11 +257,9 @@ export default {
   },
   methods: {
     getTableDataAll(){
+      this.config.loading = true
       console.log("getdata")
-      getEnrollmentList({
-        page: this.optional_config.page,
-        entry_per_page: this.optional_config.entry_per_page
-      }).then((res) => {
+      getEnrollmentList().then((res) => {
         const data = getData(res.data)
         this.notEmpty = data.status
         //回调函数，res是接口的响应值
@@ -278,7 +269,9 @@ export default {
           item.category = categoryList[item.category];
           return item
         })
+        this.tableDataCached = JSON.parse(JSON.stringify(this.tableDataAll))
         this.updateShow()
+        this.config.loading = false
       })
     },
     getSelected(){
@@ -288,7 +281,6 @@ export default {
       }).then((res) => {
         const data = getData(res.data)
         //回调函数，res是接口的响应值
-        this.selected_config.total = data.total
         this.tableDataSelected = data.list.map(item => {
           const categoryList = CONST.categoryList;
           item.category = categoryList[item.category];
@@ -297,10 +289,12 @@ export default {
       })
     },
     updateShow() {
-      this.tableDataShow = JSON.parse(JSON.stringify(this.tableDataAll))
-      if (this.searchKey) {
-        this.tableDataShow = this.tableDataShow.filter(item => item.name.indexOf(this.searchKey) >= 0)
-      }
+      const list = this.tableDataCached
+      this.optional_config.total = list.length
+      const page = this.optional_config.page
+      const per = this.optional_config.entry_per_page
+      const start = (page - 1) * per
+      this.tableDataShow = list.slice(start, start + per)
     },
     handleLook(row) {
       const to = this.$router.resolve({
@@ -363,6 +357,17 @@ export default {
   created() {
     this.getTableDataAll()
     this.getSelected()
+  },
+  watch:{
+    searchKey: function (){
+      let list = JSON.parse(JSON.stringify(this.tableDataAll));
+      if (this.searchKey) {
+        list = list.filter(item => item.name.indexOf(this.searchKey) >= 0)
+      }
+      this.tableDataCached = list
+      this.optional_config.page = 1
+      this.updateShow()
+    }
   }
 }
 </script>

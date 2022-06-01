@@ -15,11 +15,10 @@ export const responseToApplication = (params) => {
         })
     }
     //over
-export const getApplication = (params) => {
+export const getApplication = () => {
         return axios.request({
             url: '/admin/application/list',
             method: 'get',
-            params
         })
     }
     //
@@ -32,11 +31,10 @@ export const selectCurriculum = (para) => {
     })
 }
 
-export const getEnrollmentList = (params) => {
+export const getEnrollmentList = () => {
     return axios.request({
         url: '/student/enrollment/list',
         method : 'get',
-        params
     })
 }
 export const getSelectedList = (params) => {
@@ -57,7 +55,7 @@ export const delSelected = (params) => {
 export const getCurriculumDetail = (params) => {
         if (params.curriculum_id) {
             return axios.request({
-                url: '/admin/curriculum/detail',
+                url: '/curriculum/detail',
                 method: 'get',
                 params
             })
@@ -72,11 +70,10 @@ export const getCurriculumDetail = (params) => {
     /**
      * Curriculum
      */
-export const getCurriculum = (params) => {
+export const getCurriculum = () => {
     return axios.request({
         url: '/admin/curriculum/list',
         method: 'get',
-        params
     })
 }
 export const delCurriculum = (params) => {

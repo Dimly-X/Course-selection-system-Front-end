@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <div id="courseTable" class="tableOuter">
+    <div id="courseTable" class="tableOuter" v-loading="config.loading">
       <table id="colorfultable" class="gridtable" style="width:99%;text-align:center;" >
         <thead class="gridhead">
         <tr>
@@ -46,6 +46,9 @@ export default {
       mycolor: 'blue',
       notEmpty: true,
       tableData1111: [],
+      config: {
+        loading: false
+      }
     }
   },
   methods: {
@@ -71,6 +74,7 @@ export default {
       ]
     },
     getTable: function (){
+      this.config.loading = true
       getMyCurriculumTable().then(
           (res) => {
             const data = getData(res.data)
@@ -78,6 +82,7 @@ export default {
             this.changeColor()
             document.getElementById("colorfultable")
             this.$forceUpdate()
+            this.config.loading = false
           }
       )
     },

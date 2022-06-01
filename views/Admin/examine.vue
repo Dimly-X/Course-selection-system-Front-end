@@ -1,7 +1,8 @@
 <template>
     <div class="examine_outer application">
       <div class="common-table">
-        <el-table :data="tableData" stripe border>
+        <el-table :data="tableDataShow" stripe border
+        v-loading="config.loading">
           <el-table-column
               show-overflow-tooltip
               align="center"
@@ -51,9 +52,8 @@
             layout="prev, pager, next"
             :total="config.total"
             :current-page.sync="config.page"
-            @current-change="getList()"
+            @current-change="updateShow"
             page-size:10
-
         >
         </el-pagination>
       </div>
@@ -71,7 +71,8 @@ export default{
         return{
             POSITIVE: CONST.RESPONSE_STATUS.POSITIVE,
             NEGATIVE: CONST.RESPONSE_STATUS.NEGATIVE,
-            tableData:[],
+            tableDataShow:[],
+            tableDataAll: [],
             tableLabel:[
                 {
                     prop:"apply_time",
@@ -97,27 +98,33 @@ export default{
             config: {
                 total: 30,
                 page: 1,
-                entry_per_page: 10
+                entry_per_page: 10,
+                loading: false
             }
         }
     },
     methods:{
-        getList(curriculum_name = ''){
+      updateShow() {
+        const list = this.tableDataAll
+        this.config.total = list.length
+        const page = this.config.page
+        const per = this.config.entry_per_page
+        const start = (page - 1) * per
+        this.tableDataShow = list.slice(start, start + per)
+      },
+        getList(){
             this.config.loading =true
-            curriculum_name ? (this.config.page = 1) : '' //搜索
-            getApplication({
-                page: this.config.page,
-                entry_per_page: this.config.entry_per_page
-            }).then( (res) => {
+            getApplication().then( (res) => {
                 const data = getData(res.data)
                 //回调函数，res是接口的响应值
-                this.tableData = data.list.map(item => {
+                this.tableDataAll = data.list.map(item => {
                     const categoryList = CONST.categoryList;
                     item.category_label = categoryList[item.category];
                     return item
                 })
                 this.config.total = data.count
                 this.config.loading = false
+                this.updateShow()
             })
         },
       lookApplication(row){
@@ -145,10 +152,16 @@ export default{
                         message: data.message,
                         type: data.status?'success':'warning'
                       })
-                  this.getList()
+                  if(data.status == CONST.RESPONSE_STATUS.POSITIVE) {
+                    this.delFromList(row)
+                  }
                 })
             })
         },
+      delFromList(row){
+        this.tableDataAll = this.tableDataAll.filter( item => item !== row)
+        this.updateShow()
+      }
     },
     //（生命周期）创造的时候就要调用
     created() {

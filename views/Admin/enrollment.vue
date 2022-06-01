@@ -22,7 +22,7 @@
     </div>
     <div class="outer">
       <div class="common-table">
-        <el-table :data="tableData" stripe border>
+        <el-table :data="tableData" stripe border v-loading="config.loading">
           <el-table-column
               show-overflow-tooltip
               align="center"
@@ -55,17 +55,6 @@
           </el-table-column>
         </el-table>
         <!-- @current-change是改变页数的时候的回调函数 -->
-      </div>
-      <div class="pager">
-        <el-pagination
-            layout="prev, pager, next"
-            :total="config.total"
-            :current-page.sync="config.page"
-            @current-change="getList()"
-            page-size:10
-
-        >
-        </el-pagination>
       </div>
     </div>
   </div>
@@ -102,7 +91,7 @@ export default {
       formData: {
         type: '',
         name: '',
-        time: []
+        time: ''
       },
       form: [
         {
@@ -182,7 +171,8 @@ export default {
       ],
       config: {
         total: 30,
-        page: 1
+        page: 1,
+        loading: false
       }
     }
   },
@@ -190,6 +180,11 @@ export default {
     confirm() {
       // 要说明的是，这里不是调用了接口吗，真正的接口定义应该是在/api/data.js里
       // 但是因为我是用mock模拟的接口，所以这里暂时是在mock.js里面把接口拦住了（之前课程管理页也是用的这个方法）
+      console.log(JSON.stringify(this.formData))
+      if(!this.formData.time || !this.formData.name || this.formData.type === ''){
+        this.$message.warning("请输入完整信息")
+        return
+      }
       if (this.operateType === 'create') {
         this.formData.time[0] = Number(this.formData.time[0])
         this.formData.time[1] = Number(this.formData.time[1])

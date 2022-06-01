@@ -1,7 +1,8 @@
 <template>
   <div class="outer">
     <div class="common-table">
-      <el-table :data="tableData" stripe border>
+      <el-table v-loading="this.config.loading"
+                :data="tableData" stripe border>
         <el-table-column
             show-overflow-tooltip
             align="center"
