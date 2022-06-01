@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <div id="courseTable" class="tableOuter">
-      <table id="colorfultable" class="gridtable" style="width:99%;text-align:center;" :key = "refresh">
+      <table id="colorfultable" class="gridtable" style="width:99%;text-align:center;" >
         <thead class="gridhead">
         <tr>
           <th class="week" style="height: 30px">时间  \  星期</th>
@@ -83,6 +83,9 @@ export default {
     },
     changeColor:function (){
       var table = document.getElementById("colorfultable");
+      if(!table){
+        return
+      }
       for(const i of [0,1,2,3,4,5,6]){
         for(const j of [0,1,2,3,4,5,6,7,8,9]){
           if(this.tableData[i][j] !== ''){

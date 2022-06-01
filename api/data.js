@@ -23,16 +23,36 @@ export const getApplication = (params) => {
         })
     }
     //
-export const getAllCurriculum = (params) => {
+
+export const selectCurriculum = (para) => {
     return axios.request({
-        url: '/admin/curriculum/list',
+        url: '/student/enrollment/select',
+        method: 'post',
+        data: para
+    })
+}
+
+export const getEnrollmentList = (params) => {
+    return axios.request({
+        url: '/student/enrollment/list',
+        method : 'get',
+        params
+    })
+}
+export const getSelectedList = (params) => {
+    return axios.request({
+        url: '/student/enrollment/selected',
         method: 'get',
         params
     })
 }
-
-
-
+export const delSelected = (params) => {
+    return axios.request({
+        url: '/student/enrollment/cancel',
+        method: 'post',
+        data: params
+    })
+}
 //over
 export const getCurriculumDetail = (params) => {
         if (params.curriculum_id) {

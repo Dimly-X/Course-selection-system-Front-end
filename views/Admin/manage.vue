@@ -26,7 +26,7 @@
           :inline="true"
           ref="form"
       >
-        <el-button type="primary" @click="getList">搜索</el-button>
+        <el-button type="primary" @click="updateShow">搜索</el-button>
       </common-form>
     </div>
     <div>
@@ -164,6 +164,7 @@ export default {
       searchForm: {
         keyword: ''
       },
+      tableDataAll: [],
       tableData: [],
       tableLabel: [
         {
@@ -208,16 +209,6 @@ export default {
     }
   },
   methods: {
-    transCat(){
-      var list = []
-      for(var i = 0; i < CONST.categoryList.length; i ++){
-        list.push({
-          label: CONST.categoryList[i],
-          value: i
-        })
-      }
-      return list
-    },
     transDept(){
       var list = []
       for(var i = 0; i < CONST.departmentList.length; i ++){
@@ -271,21 +262,28 @@ export default {
       }
     },
 
+    updateShow(){
+      this.tableData = JSON.parse(JSON.stringify(this.tableDataAll))
+      if(!this.searchForm.keyword){
+        return
+      }
+      this.tableData = this.tableData.filter((item) => item.curriculum_name.indexOf(this.searchForm.keyword) >= 0)
+    },
     getList() {
       this.config.loading = true
       this.searchForm.keyword ? (this.config.page = 1) : '' //搜索
       getCurriculum({
         page: this.config.page,
         entry_per_page: this.config.entry_per_page,
-        search_key: this.searchForm.keyword
       }).then((res) => {
         const data = getData(res.data);
-        this.tableData = data.list.map(item => {
+        this.tableDataAll = data.list.map(item => {
           item.category_label = CONST.categoryList[item.category];
           return item
         })
         this.config.total = data.count
         this.config.loading = false
+        this.updateShow()
       })
     },
     lookCurriculum(row) {
