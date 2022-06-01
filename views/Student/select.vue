@@ -153,7 +153,7 @@
                   layout="prev, pager, next"
                   :total="selected_config.total"
                   :current-page.sync="selected_config.page"
-                  @current-change="getOptionalList"
+                  @current-change="getSelectedList"
                   :page-size=10
               >
               </el-pagination>
