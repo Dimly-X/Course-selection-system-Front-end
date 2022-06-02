@@ -84,6 +84,20 @@
         </template>
         {{ curriculum.remark }}
       </el-descriptions-item>
+      <el-descriptions-item v-if="curriculum.status">
+        <template slot="label">
+          <i class="el-icon-tickets"></i>
+          备注
+        </template>
+        {{ curriculum.status?'通过':'驳回' }}
+      </el-descriptions-item>
+      <el-descriptions-item v-if="curriculum.feedback">
+        <template slot="label">
+          <i class="el-icon-tickets"></i>
+          反馈
+        </template>
+        {{ curriculum.feedback }}
+      </el-descriptions-item>
     </el-descriptions>
   </div>
 </template>

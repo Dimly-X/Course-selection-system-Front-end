@@ -46,7 +46,7 @@
       </el-table>
       <!-- @current-change是改变页数的时候的回调函数 -->
     </div>
-    <div class="pager">
+    <div class="pager" v-if="config.page">
       <el-pagination
           layout="prev, pager, next"
           :total="config.total"

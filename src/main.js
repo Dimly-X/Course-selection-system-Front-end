@@ -49,7 +49,8 @@ Vue.use(Tabs)
 Vue.use(TabPane)
 import { Loading } from 'element-ui';
 Vue.use(Loading.directive);
-
+import JsonExcel from 'vue-json-excel'
+Vue.component('downloadExcel', JsonExcel)
 
 //因为axios不是插件，所以想使用的话需要把它绑定在vue的prototype这个属性上
 Vue.prototype.$http = http

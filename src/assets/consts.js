@@ -19,19 +19,20 @@ export default {
         UNAUTHORIZED: '没有权限'
     },
     menuList: [
-        [{
-            path: '/',
-            name: 'home',
-            label: '首页',
-            icon: 's-home',
-            url: 'Anyone/home'
-        },
+        [
+            {
+                path: '/',
+                name: 'home',
+                label: '首页',
+                icon: 's-home',
+                url: 'Anyone/home'
+            },
             {
                 path: '/table',
                 name: 'table',
                 label: '我的课表',
-                icon: 'document-checked',
-                url: 'Student/table'
+                icon: 'date',
+                url: 'Anyone/table'
             },
             {
                 path: '/score',
@@ -48,19 +49,27 @@ export default {
                 url: 'Student/select'
             }
         ],
-        [{
-            path: '/',
-            name: 'home',
-            label: '首页',
-            icon: 's-home',
-            url: 'Anyone/home'
-        },
+        [
             {
-                path: '/release',
-                name: 'release',
-                label: '成绩发布',
-                icon: 'document-checked',
-                url: 'Teacher/release'
+                path: '/',
+                name: 'home',
+                label: '首页',
+                icon: 's-home',
+                url: 'Anyone/home'
+            },
+            {
+                path: '/table',
+                name: 'table',
+                label: '我的课表',
+                icon: 'date',
+                url: 'Anyone/table'
+            },
+            {
+                path: '/info',
+                name: 'info',
+                label: '课程信息',
+                icon: 'document',
+                url: 'Teacher/info'
             },
             {
                 path: '/application',
@@ -70,13 +79,14 @@ export default {
                 url: 'Teacher/application'
             }
         ],
-        [{
-            path: '/',
-            name: 'home',
-            label: '首页',
-            icon: 's-home',
-            url: 'Anyone/home'
-        },
+        [
+            {
+                path: '/',
+                name: 'home',
+                label: '首页',
+                icon: 's-home',
+                url: 'Anyone/home'
+            },
             {
                 path: '/manage',
                 name: 'manage',
@@ -104,13 +114,13 @@ export default {
     departmentList: ['软件工程学院', '法学院', '马克思主义学院', '经济学院', '社会发展学院', '外语学院', '国际汉语文化学院', '心理与认知科学学院'],
     statusList: ['待处理', '通过', '拒绝'],
     roleList: ['学生', '教师', '教务'],
-    dayList: ['周一','周二','周三','周四','周五','周六','周日'],
-    cnNumber: ['一', '二', '三', '四', '五', '六', '七', '八' ,'九' ,'十'],
-    getTime(id){
+    dayList: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+    cnNumber: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'],
+    getTime(id) {
         return ((id % 10) + 1) + ''
     },
-    getDay(id){
-        console.log('getday', id/10)
+    getDay(id) {
+        console.log('getday', id / 10)
         return this.dayList[parseInt(id / 10)];
     }
 }

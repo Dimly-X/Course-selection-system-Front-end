@@ -2,7 +2,7 @@
     <div class="examine_outer application">
       <div class="common-table">
         <el-table :data="tableDataShow" stripe border
-        v-loading="config.loading">
+          v-loading="config.loading">
           <el-table-column
               show-overflow-tooltip
               align="center"

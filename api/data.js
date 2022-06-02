@@ -164,16 +164,24 @@ export const getScore = (params) => {
 /**
  * ScoreRelease
  */
-export const getRelease = () => {
+export const getCurriculumList = () => {
     return axios.request({
-        url: 'http://localhost:8081/register/getRelease',
+        url: '/teacher/curriculum/list',
         method: 'get'
+    })
+}
+
+export const setScore = (params) => {
+    return axios.request({
+        url: '/teacher/curriculum/setscore',
+        method: 'post',
+        data: params
     })
 }
 
 export const getStudentList = (params) => {
     return axios.request({
-        url: 'http://localhost:8081/register/getStudentList',
+        url: '/teacher/curriculum/studlist',
         method: 'get',
         params
     })

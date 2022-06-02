@@ -18,17 +18,10 @@
     </el-dialog>
     <div class="application-header">
       <el-button type="primary" @click="newApplication">+ 申请</el-button>
-      <common-form
-          :formLabel="searchFormLabel"
-          :form="searchForm"
-          :inline="true"
-          ref="form"
-      >
-        <el-button type="primary" @click="getList(searchForm.keyword)">搜索</el-button>
-      </common-form>
     </div>
     <div>
       <common-table
+          style="margin-top: 10px"
           :tableData="tableData"
           :tableLabel="tableLabel"
           :config="config"
@@ -218,8 +211,6 @@ export default {
         }
       ],
       config: {
-        total: 30,
-        page: 1
       }
     }
   },
