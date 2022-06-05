@@ -42,7 +42,7 @@ export const selectCurriculum = (para) => {
 export const getEnrollmentList = () => {
     return axios.request({
         url: '/student/enrollment/list',
-        method : 'get',
+        method: 'get',
     })
 }
 export const getSelectedList = (params) => {
@@ -53,13 +53,13 @@ export const getSelectedList = (params) => {
     })
 }
 export const delSelected = (params) => {
-    return axios.request({
-        url: '/student/enrollment/cancel',
-        method: 'post',
-        data: params
-    })
-}
-//over
+        return axios.request({
+            url: '/student/enrollment/cancel',
+            method: 'post',
+            data: params
+        })
+    }
+    //over
 export const getCurriculumDetail = (params) => {
         if (params.curriculum_id) {
             return axios.request({
@@ -134,6 +134,7 @@ export const createEnrollment = (params) => {
      * Menu
      */
 export const tryLogin = (param) => {
+    console.log("参数", param)
     return axios.request({
         url: '/login',
         method: 'post',

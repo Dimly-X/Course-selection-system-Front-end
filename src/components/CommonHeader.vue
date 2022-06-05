@@ -42,7 +42,7 @@ import {getData} from '../../api/data'
                         type: data.status ? 'success' : 'warning'
                     })
                 })
-                this.$store.commit('clearToken')
+                // this.$store.commit('clearToken')
                 this.$store.commit('clearMenu')
                 this.$router.push('/login')
             }

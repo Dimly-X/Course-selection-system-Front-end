@@ -1,8 +1,11 @@
 import axios from "axios";
 import config from "../config";
 
-//拿到请求的接口地址（并不明白
-const baseUrl = 'https://api.virapi.com/vir_github1d2e1gfa4ba78/course'//process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
+//拿到请求的接口地址
+const baseUrl = 'https://api.virapi.com/vir_github1d2e1gfa4ba78/course'
+    //'/course'
+    //'http://brog.rainspace.cn:8080/course'
+    //'https://api.virapi.com/vir_github1d2e1gfa4ba78/course'
 class HttpRequest {
 
     constructor(url) {
