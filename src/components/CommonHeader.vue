@@ -20,6 +20,9 @@
 
 <!-- 把头像动态引入进来 -->
 <script>
+import {tryLogout} from '../../api/data'
+import {getData} from '../../api/data'
+
     export default{
         name: 'CommonHeader' ,
         data(){
@@ -32,6 +35,13 @@
                 this.$store.commit('collapseMenu')
             },
             logOut(){
+                tryLogout().then(res => {
+                    const data = getData(res.data)
+                    this.$message({
+                        message: data.message,
+                        type: data.status ? 'success' : 'warning'
+                    })
+                })
                 this.$store.commit('clearToken')
                 this.$store.commit('clearMenu')
                 this.$router.push('/login')
