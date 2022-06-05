@@ -82,15 +82,15 @@ export const createCurriculum = (params) => {
 }
 
 export const createEnrollment = (params) => {
-    return axios.request({
-        url: '/admin/enrollment/create',
-        method: 'post',
-        data: params
-    })
-}
-/**
- * Menu
- */
+        return axios.request({
+            url: '/admin/enrollment/create',
+            method: 'post',
+            data: params
+        })
+    }
+    /**
+     * Menu
+     */
 export const tryLogin = (param) => {
     return axios.request({
         url: '/login',
@@ -98,6 +98,13 @@ export const tryLogin = (param) => {
         data: param
     })
 }
+export const tryLogout = () => {
+    return axios.request({
+        url: '/logout',
+        method: 'post'
+    })
+}
+
 
 /**
  * Any_Home
@@ -127,15 +134,15 @@ export const editEnrollment = (params) => {
     })
 }
 export const deleteEnrollment = (params) => {
-    return axios.request({
-        url: '/admin/enrollment/del',
-        method: 'post',
-        data: params
-    })
-}
-/**
- * Student_Score
- */
+        return axios.request({
+            url: '/admin/enrollment/del',
+            method: 'post',
+            data: params
+        })
+    }
+    /**
+     * Student_Score
+     */
 export const getScore = (params) => {
     return axios.request({
         url: '/student/score',
