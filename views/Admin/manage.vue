@@ -7,6 +7,7 @@
     >
       <!-- 通过ref拿到当前组件的实例 -->
       <my-form
+          v-loading="this.config.form_loading"
           :form="operateFormLabel"
           :formData="operateForm"
           :inline="false"
@@ -26,16 +27,17 @@
           :inline="true"
           ref="form"
       >
-        <el-button type="primary" @click="getList">搜索</el-button>
+        <el-button type="primary" @click="updateKey">搜索</el-button>
       </common-form>
     </div>
     <div>
       <common-table
-          :tableData="tableData"
+
+          :tableData="tableDataShow"
           :tableLabel="tableLabel"
           :config="config"
 
-          @changePage="getList()"
+          @changePage="updateShow"
           @look="lookCurriculum"
           @edit="edittCurriculum"
           @del="deleteCurriculum"
@@ -58,7 +60,7 @@ import {getData} from '../../api/data'
 import CurriculumDetail from '../Anyone/curriculumDetail.vue'
 import CONST from '@/assets/consts'
 import MyForm from "@/components/MyForm";
-import Form from '@/assets/admin_create_curriculum';
+import Form from '@/assets/create_curriculum';
 
 export default {
   name: 'Manage',
@@ -148,10 +150,10 @@ export default {
         credit: '',
         teacher: '',
         semester: '',
+        upper_limit: '',
         requirement: '',
         introduction: '',
         remark: '',
-        apply_state: '',
         time: ''
       },
       searchFormLabel: [
@@ -164,7 +166,9 @@ export default {
       searchForm: {
         keyword: ''
       },
-      tableData: [],
+      tableDataAll: [],
+      tableDataCached: [],
+      tableDataShow: [],
       tableLabel: [
         {
           prop: "create_time",
@@ -203,21 +207,14 @@ export default {
       config: {
         total: 30,
         page: 1,
-        entry_per_page: 10
-      }
+        entry_per_page: 10,
+        loading: false,
+        form_loading: false
+      },
+      rowSelected: ''
     }
   },
   methods: {
-    transCat(){
-      var list = []
-      for(var i = 0; i < CONST.categoryList.length; i ++){
-        list.push({
-          label: CONST.categoryList[i],
-          value: i
-        })
-      }
-      return list
-    },
     transDept(){
       var list = []
       for(var i = 0; i < CONST.departmentList.length; i ++){
@@ -235,7 +232,14 @@ export default {
         const data = getData(res.data);
         if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
           this.isShow = false
-          this.getList()
+          this.delFromListById(data.curriculum_id)
+          this.addToList({
+            curriculum_id: data.curriculum_id,
+            curriculum_name: this.operateForm.curriculum_name,
+            category: CONST.categoryList[this.operateForm.category],
+            teacher: this.operateForm.teacher,
+            apply_time: data.apply_time
+          })
         }
         this.$message({
           type: data.status ? 'success' : "warning",
@@ -252,11 +256,8 @@ export default {
         ).then(callback)
       }
     },
-    newApplication() {
-      this.isShow = true
-      this.operateType = 'add'
+    clearForm(){
       this.operateForm = {
-        curriculum_id: '',
         curriculum_name: '',
         department: '',
         category: '',
@@ -270,22 +271,43 @@ export default {
         time: ''
       }
     },
+    newApplication() {
+      this.isShow = true
+      this.operateType = 'add'
+      this.clearForm()
+    },
 
+    updateKey(){
+      this.config.loading = true
+      this.tableDataCached = JSON.parse(JSON.stringify(this.tableDataAll))
+      if(!this.searchForm.keyword){
+        this.updateShow()
+        return
+      }
+      this.tableDataCached = this.tableDataCached.filter((item) => item.curriculum_name.indexOf(this.searchForm.keyword) >= 0)
+      this.config.page = 1
+      this.updateShow()
+      this.config.loading = false
+    },
+    updateShow() {
+      const list = this.tableDataCached
+      this.config.total = list.length
+      const page = this.config.page
+      const per = this.config.entry_per_page
+      const start = (page - 1) * per
+      this.tableDataShow = list.slice(start, start + per)
+    },
     getList() {
       this.config.loading = true
-      this.searchForm.keyword ? (this.config.page = 1) : '' //搜索
-      getCurriculum({
-        page: this.config.page,
-        entry_per_page: this.config.entry_per_page,
-        search_key: this.searchForm.keyword
-      }).then((res) => {
+      getCurriculum().then((res) => {
         const data = getData(res.data);
-        this.tableData = data.list.map(item => {
+        this.tableDataAll = data.list.map(item => {
           item.category_label = CONST.categoryList[item.category];
           return item
         })
-        this.config.total = data.count
         this.config.loading = false
+        this.tableDataCached = this.tableDataAll
+        this.updateShow()
       })
     },
     lookCurriculum(row) {
@@ -296,14 +318,18 @@ export default {
       window.open(to.href, '_blank')
     },
     edittCurriculum(row) {
+      this.clearForm()
+      this.config.form_loading = true
       this.isShow = true
       this.operateType = 'edit'
+      this.rowSelected = row
       getCurriculumDetail({
         curriculum_id: row.curriculum_id
       }).then((res) => {
         const data = getData(res.data)
         this.operateForm = data
         this.operateForm.curriculum_id = row.curriculum_id
+        this.config.form_loading = false
       })
       //this.operateForm = JSON.parse(JSON.stringify(row));//不能直接=row，因为这是vue 的双向数据绑定的弊端，实时更新数据，因为是一个数据源，因为在修改对象的时候，对象的指针直接指向页面数据了
     },
@@ -321,10 +347,18 @@ export default {
             type: data.status? 'success': 'warning',
             message: data.message
           })
-          this.getList()
+          this.delFromListById(row.curriculum_id)
         })
       })
     },
+    delFromListById(id){
+      this.tableDataAll = this.tableDataAll.filter(item => item.curriculum_id !== id)
+      this.updateShow()
+    },
+    addToList(item){
+      this.tableDataAll.push(item)
+      this.updateShow()
+    }
   },
   //（生命周期）创造的时候就要调用
   created() {

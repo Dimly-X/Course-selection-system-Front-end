@@ -76,6 +76,10 @@ const router = new VueRouter({
     mode: 'history',
     routes
 })
+const VueRouterPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (to) {
+    return VueRouterPush.call(this, to).catch(err => err)
+}
 
 //向外暴露
 export default router

@@ -1,7 +1,7 @@
 <template>
     <el-row class="home" :gutter="20">
-        <el-col :span="8" style="margin-top: 20px">
-            <el-card class="user_card" >
+        <el-col :span="8" style="margin-top: 20px" >
+            <el-card class="user_card" v-loading="this.config.loading">
                 <div class="user">
                     <img :src="userImg" />
                     <div class="userinfo">
@@ -26,6 +26,9 @@ export default{
     name:'Home',
     data(){
       return{
+            config:{
+              loading: false
+            },
             userImg: require('@/assets/images/commonPortrait.png'),
             data: {
               personal_name: '',
@@ -36,6 +39,7 @@ export default{
         }
     },
     mounted(){
+        this.config.loading = true
         getHomeData().then(res => {
           this.data = getData(res.data)
           if(this.data.user_role === CONST.USER_ROLE.ADMIN){
@@ -47,6 +51,7 @@ export default{
           }else{
             this.data.user_role = '未知'
           }
+          this.config.loading = false
         })
     }
 }

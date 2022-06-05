@@ -15,29 +15,55 @@ export const responseToApplication = (params) => {
         })
     }
     //over
-export const getApplication = (params) => {
+export const getApplication = () => {
         return axios.request({
             url: '/admin/application/list',
             method: 'get',
-            params
         })
     }
     //
-export const getAllCurriculum = (params) => {
+
+export const delApplication = (params) => {
     return axios.request({
-        url: '/admin/curriculum/list',
+        url: '/teacher/application/del',
+        method: 'post',
+        data: params
+    })
+}
+
+export const selectCurriculum = (para) => {
+    return axios.request({
+        url: '/student/enrollment/select',
+        method: 'post',
+        data: para
+    })
+}
+
+export const getEnrollmentList = () => {
+    return axios.request({
+        url: '/student/enrollment/list',
+        method : 'get',
+    })
+}
+export const getSelectedList = (params) => {
+    return axios.request({
+        url: '/student/enrollment/selected',
         method: 'get',
         params
     })
 }
-
-
-
+export const delSelected = (params) => {
+    return axios.request({
+        url: '/student/enrollment/cancel',
+        method: 'post',
+        data: params
+    })
+}
 //over
 export const getCurriculumDetail = (params) => {
         if (params.curriculum_id) {
             return axios.request({
-                url: '/admin/curriculum/detail',
+                url: '/curriculum/detail',
                 method: 'get',
                 params
             })
@@ -52,11 +78,10 @@ export const getCurriculumDetail = (params) => {
     /**
      * Curriculum
      */
-export const getCurriculum = (params) => {
+export const getCurriculum = () => {
     return axios.request({
         url: '/admin/curriculum/list',
         method: 'get',
-        params
     })
 }
 export const delCurriculum = (params) => {
@@ -66,6 +91,23 @@ export const delCurriculum = (params) => {
         data: params
     })
 }
+
+export const editApplication = (params) => {
+    return axios.request({
+        url: '/teacher/application/edit',
+        method: 'post',
+        data: params
+    })
+}
+
+export const createApplication = (params) => {
+    return axios.request({
+        url: '/teacher/application/create',
+        method: 'post',
+        data: params
+    })
+}
+
 export const editCurriculum = (params) => {
     return axios.request({
         url: '/admin/curriculum/edit',
@@ -154,16 +196,24 @@ export const getScore = (params) => {
 /**
  * ScoreRelease
  */
-export const getRelease = () => {
+export const getCurriculumList = () => {
     return axios.request({
-        url: 'http://localhost:8081/register/getRelease',
+        url: '/teacher/curriculum/list',
         method: 'get'
+    })
+}
+
+export const setScore = (params) => {
+    return axios.request({
+        url: '/teacher/curriculum/setscore',
+        method: 'post',
+        data: params
     })
 }
 
 export const getStudentList = (params) => {
     return axios.request({
-        url: 'http://localhost:8081/register/getStudentList',
+        url: '/teacher/curriculum/studlist',
         method: 'get',
         params
     })
@@ -174,6 +224,14 @@ export const getMyCurriculumTable = () => {
         method: 'get'
     })
 }
+
+export const getMyApplications = () => {
+    return axios.request({
+        url: '/teacher/application/list',
+        method: 'get'
+    })
+}
+
 export const getData = (datapackage) => {
     if (datapackage.code === CONST.RESPONSE_CODE.ACCEPTED) {
         return datapackage.data

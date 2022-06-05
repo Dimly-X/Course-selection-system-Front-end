@@ -7,6 +7,7 @@
       :rules="rules"
       ref="form"
       class="login-container"
+      v-loading="config.loading"
   >
     <img src="../../src/assets/images/university_logo.png" class="logo">
     <!-- <h3 class="login_title">系统登录</h3> -->
@@ -56,6 +57,9 @@ export default {
   name: 'Login',
   data() {
     return {
+      config:{
+        loading: false
+      },
       form: {},
       rules: {
         //校验规则
@@ -75,6 +79,7 @@ export default {
   },
   methods: {
     login() {
+      this.config.loading = true
       //then就是说，调用接口之后会得到回应,res是接口的返回
       //{ data:res }这里是es6的语法，是把data先从res里面解构出来，让它（之前的res.data）作为res
       tryLogin(this.form).then((res) => {

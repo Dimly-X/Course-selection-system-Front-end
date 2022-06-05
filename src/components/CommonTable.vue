@@ -1,7 +1,8 @@
 <template>
   <div class="outer">
     <div class="common-table">
-      <el-table :data="tableData" stripe border>
+      <el-table v-loading="this.config.loading"
+                :data="tableData" stripe border>
         <el-table-column
             show-overflow-tooltip
             align="center"
@@ -45,7 +46,7 @@
       </el-table>
       <!-- @current-change是改变页数的时候的回调函数 -->
     </div>
-    <div class="pager">
+    <div class="pager" v-if="config.page">
       <el-pagination
           layout="prev, pager, next"
           :total="config.total"

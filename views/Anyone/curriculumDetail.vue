@@ -1,6 +1,7 @@
 <template>
   <div class="detail_outer">
     <el-descriptions class="margin-top"
+                     v-loading="config.loading"
                      title="课程信息"
                      :column="1"
                      :size="size" border
@@ -83,6 +84,20 @@
         </template>
         {{ curriculum.remark }}
       </el-descriptions-item>
+      <el-descriptions-item v-if="'status' in curriculum">
+        <template slot="label">
+          <i class="el-icon-tickets"></i>
+          状态
+        </template>
+        {{ curriculum.status?'通过':'驳回' }}
+      </el-descriptions-item>
+      <el-descriptions-item v-if="curriculum.feedback">
+        <template slot="label">
+          <i class="el-icon-tickets"></i>
+          反馈
+        </template>
+        {{ curriculum.feedback }}
+      </el-descriptions-item>
     </el-descriptions>
   </div>
 </template>
@@ -96,6 +111,9 @@ export default {
   name: 'CurriculumDetail',
   data() {
     return {
+      config:{
+        loading: false
+      },
       curriculum: {
         category: '',
         credit: '',
@@ -140,11 +158,13 @@ export default {
       this.curriculum.department = dept_str
     },
     pullData() {
+      this.config.loading = true
       getCurriculumDetail(this.$route.query).then((res) => {
         this.curriculum = getData(res.data)
         this.curriculum.category = CONST.categoryList[this.curriculum.category]
         this.transDept()
         this.transTime()
+        this.config.loading = false
       })
     }
   },
