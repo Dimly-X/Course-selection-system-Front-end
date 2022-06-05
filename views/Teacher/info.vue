@@ -4,9 +4,7 @@
           :title="'编辑成绩: '+this.rowSelected.name"
           :visible.sync="isShow"
           style="width: 500px;margin-left: 400px;margin-top: 100px"
-          :close-on-click-modal="false"
-
-      >
+          :close-on-click-modal="false">
         <el-input type="number"
                   v-model="operationForm.usual"
                   min="0" max="100"
@@ -151,6 +149,7 @@ export default{
         }
     },
     methods:{
+
       setscoreclick(row){
         this.operationForm={usual:'', final:''};
         this.isShow = true;
@@ -215,10 +214,6 @@ export default{
               this.config.loading = false
             })
         },
-        changeScore(){
-
-        },
-
     },
     created() {
         this.getClass() 

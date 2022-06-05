@@ -84,10 +84,10 @@
         </template>
         {{ curriculum.remark }}
       </el-descriptions-item>
-      <el-descriptions-item v-if="curriculum.status">
+      <el-descriptions-item v-if="'status' in curriculum">
         <template slot="label">
           <i class="el-icon-tickets"></i>
-          备注
+          状态
         </template>
         {{ curriculum.status?'通过':'驳回' }}
       </el-descriptions-item>

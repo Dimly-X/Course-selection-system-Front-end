@@ -60,7 +60,7 @@ import {getData} from '../../api/data'
 import CurriculumDetail from '../Anyone/curriculumDetail.vue'
 import CONST from '@/assets/consts'
 import MyForm from "@/components/MyForm";
-import Form from '@/assets/admin_create_curriculum';
+import Form from '@/assets/create_curriculum';
 
 export default {
   name: 'Manage',
@@ -144,17 +144,16 @@ export default {
       // ],
       //双向绑定↓
       operateForm: {
-        curriculum_id: '',
         curriculum_name: '',
         department: '',
         category: '',
         credit: '',
         teacher: '',
         semester: '',
+        upper_limit: '',
         requirement: '',
         introduction: '',
         remark: '',
-        apply_state: '',
         time: ''
       },
       searchFormLabel: [
@@ -233,14 +232,13 @@ export default {
         const data = getData(res.data);
         if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
           this.isShow = false
-          this.tableDataAll
-          this.delFromListById(this.operateForm.curriculum_id)
+          this.delFromListById(data.curriculum_id)
           this.addToList({
-            apply_id: this.rowSelected.apply_id,
+            curriculum_id: data.curriculum_id,
             curriculum_name: this.operateForm.curriculum_name,
-            category: this.operateForm.category,
+            category: CONST.categoryList[this.operateForm.category],
             teacher: this.operateForm.teacher,
-            apply_time: this.operateForm.time
+            apply_time: data.apply_time
           })
         }
         this.$message({

@@ -23,6 +23,14 @@ export const getApplication = () => {
     }
     //
 
+export const delApplication = (params) => {
+    return axios.request({
+        url: '/teacher/application/del',
+        method: 'post',
+        data: params
+    })
+}
+
 export const selectCurriculum = (para) => {
     return axios.request({
         url: '/student/enrollment/select',
@@ -83,6 +91,23 @@ export const delCurriculum = (params) => {
         data: params
     })
 }
+
+export const editApplication = (params) => {
+    return axios.request({
+        url: '/teacher/application/edit',
+        method: 'post',
+        data: params
+    })
+}
+
+export const createApplication = (params) => {
+    return axios.request({
+        url: '/teacher/application/create',
+        method: 'post',
+        data: params
+    })
+}
+
 export const editCurriculum = (params) => {
     return axios.request({
         url: '/admin/curriculum/edit',
@@ -192,6 +217,14 @@ export const getMyCurriculumTable = () => {
         method: 'get'
     })
 }
+
+export const getMyApplications = () => {
+    return axios.request({
+        url: '/teacher/application/list',
+        method: 'get'
+    })
+}
+
 export const getData = (datapackage) => {
     if (datapackage.code === CONST.RESPONSE_CODE.ACCEPTED) {
         return datapackage.data
