@@ -134,19 +134,19 @@ export const createEnrollment = (params) => {
      * Menu
      */
 export const tryLogin = (param) => {
-    console.log("参数", param)
-    return axios.request({
-        url: '/login',
-        method: 'post',
-        data: param
-    })
-}
-export const tryLogout = () => {
-    return axios.request({
-        url: '/logout',
-        method: 'post'
-    })
-}
+        console.log("参数", param)
+        return axios.request({
+            url: '/login',
+            method: 'post',
+            data: param
+        })
+    }
+    // export const tryLogout = () => {
+    //     return axios.request({
+    //         url: '/logout',
+    //         method: 'post'
+    //     })
+    // }
 
 
 /**

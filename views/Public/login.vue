@@ -61,8 +61,6 @@ export default {
         loading: false
       },
       form: {
-        user_name:'',
-        password:''
       },
       rules: {
         //校验规则
@@ -81,19 +79,17 @@ export default {
     }
   },
   methods: {
-    login() {
+  login() {
       this.config.loading = true
       //then就是说，调用接口之后会得到回应,res是接口的返回
       //{ data:res }这里是es6的语法，是把data先从res里面解构出来，让它（之前的res.data）作为res
-      tryLogin({
-        "user_name": this.form.user_name,
-        "password": this.form.password
-        }).then((res) => {
+      tryLogin(this.form).then((res) => {
         const data = getData(res.data);
         if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
           this.$store.commit('clearMenu')
-          this.$store.commit('setMenu', CONST.menuList[data.identity])
-          // this.$store.commit('setToken', data.token)
+          this.$store.commit('setMenu', CONST.menuList[data.user_role])
+          console.log("menu",CONST.menuList[data.user_role])
+          this.$store.commit('setToken', data.token)
           this.$store.commit('addMenu', this.$router)
           this.$router.push({name: 'Main'})
         } else {

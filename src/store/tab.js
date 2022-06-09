@@ -1,4 +1,5 @@
 import Cookie from "js-cookie"
+import Router from 'vue-router'
 
 export default {
     state: {
