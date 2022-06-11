@@ -345,6 +345,11 @@ export default {
             const data = getData(res.data)
             if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
               this.getSelected()
+              this.tableDataCached = this.tableDataCached.filter(item => {
+                console.log(JSON.stringify(item))
+                return item.curriculum_id !== curriculum_id
+              })
+              this.updateShow()
             }
             this.$message({
               message: data.message,

@@ -84,6 +84,7 @@ export default {
       //then就是说，调用接口之后会得到回应,res是接口的返回
       //{ data:res }这里是es6的语法，是把data先从res里面解构出来，让它（之前的res.data）作为res
       tryLogin(this.form).then((res) => {
+        this.config.loading = false
         const data = getData(res.data);
         if (data.status === CONST.RESPONSE_STATUS.POSITIVE) {
           this.$store.commit('clearMenu')
